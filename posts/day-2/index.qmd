@@ -1,0 +1,246 @@
+---
+title: "Summaries"
+author: "Sara S"
+---
+
+## Installing and Importing packages
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(mosaic)
+library(skimr)
+library(knitr)
+library(kableExtra)
+library(ggformula)
+library(babynames)
+```
+
+## Dataset: Mpg
+
+```{r}
+mpg
+```
+
+## Filtering the data(top 10)
+
+Retrieves the first 10 rows of the dataset
+
+```{r}
+mpg %>% 
+  head(10)
+```
+
+## Using glimpse, mosaic, skimr and mutate to organize data
+
+Notes:
+
+-   Glimpse offers a brief overview of the dataset structure, showing the variable names and types for better understanding.
+
+-   Inspect function from the mosaic package provides a detailed summary of the dataset's columns, including basic statistics like levels.
+
+-   Skim delivers a comprehensive summary of the dataset, detailing counts, means, and distribution metrics for each variable.
+
+```{r}
+glimpse(mpg)
+```
+
+```{r}
+inspect(mpg)
+```
+
+```{r}
+skimr:: skim(mpg)
+```
+
+## Factorizing data
+
+It converts qualitative data into factors.
+
+Notes:
+
+-   'something_modified \<- something' creates a new dataset by taking the existing dataset and preparing it for further modifications.
+
+-   'dplyr::mutate' is the mutate function from the dplyr package, which is used to create or modify columns in a dataframe.
+
+-   'something = as_factor(something)' converts the column from int or chr to a factor.
+
+```{r}
+mpg_modified <- mpg %>%
+  dplyr::mutate(
+    cyl = as_factor(cyl),
+    fl = as_factor(fl),
+    drv = as_factor(drv),
+    class = as_factor(class),
+    trans = as_factor(trans)
+  )
+glimpse(mpg_modified)
+```
+
+## Grouped by cly
+
+This groups the modified dataset by the number of cylinders (cyl) and calculates the average highway miles per gallon (average_hwy) along with the count of cars in each group.
+
+```{r}
+mpg_modified %>%
+  group_by(cyl) %>%
+  summarize(average_hwy = mean(hwy), count = n())
+```
+
+## Grouping with cyl and fl
+
+It groups the dataset by both the number of cylinders (cyl) and fuel type (fl) calculating the average highway miles per gallon (average_hwy) along with the count of cars in each group.
+
+```{r}
+mpg_modified %>%
+  group_by(cyl, fl) %>%
+  summarize(average_hwy = mean(hwy), count = n())
+```
+
+## Grouping by manufacturer
+
+It groups the mpg dataset by manufacturer, calculating the average city miles per gallon (average_cty) and the count of models from each manufacturer.
+
+```{r}
+mpg %>% 
+  group_by(manufacturer) %>% 
+  summarize(average_cty = mean(cty), count = n())
+```
+
+## Conclusion
+
+The analysis of the mpg dataset shows important trends in fuel efficiency related to vehicle features. Converting numeric variables into factors helps with the analysis, and grouping operations offer clear averages and counts.
+
+## Dataset: Babynames
+
+```{r}
+babynames
+```
+
+```{r}
+babynames %>% filter (name == "Sara") %>% head(15)
+```
+
+## Using glimpse, mosaic, skimr to organize data
+
+```{r}
+babynames%>% mosaic::inspect()
+```
+
+```{r}
+babynames %>% dplyr::glimpse()
+```
+
+## Factorizing data
+
+```{r}
+babynames_modified <- babynames %>%
+  dplyr::mutate(
+    sex = as_factor(sex)
+  )
+glimpse(babynames_modified)
+```
+
+```{r}
+babynames %>% skimr::skim()
+```
+
+## Conclusion
+
+The examination of the babynames dataset reveals significant patterns in naming trends. By filtering for the name "Sara" and converting the qualitative variable into a factor, the data becomes more organized and easier to analyze.
+
+## Dataset: Math Anxiety
+
+Notes:
+
+-   'read_delim' is for reading text files that have semicolons.
+
+-   'read_csv' is for reading a csv file stored on the device.
+
+```{r}
+math_an <- read_delim("../../data/MathAnxiety.csv")
+math_an
+```
+
+## Organizing Data
+
+Provides an overview of the dataset's structure, including data types, variable details, counts,etc.
+
+```{r}
+math_an %>% dplyr::glimpse()
+```
+
+```{r}
+math_an %>% mosaic::inspect()
+```
+
+```{r}
+math_an %>% skimr::skim()
+```
+
+## Factorizing
+
+Converting qualitative data columns into factors.
+
+```{r}
+math_an_modified <- math_an %>%
+  dplyr::mutate(
+    Age = as_factor(Age),
+    Gender = as_factor(Gender),
+    Grade = as_factor(Grade),
+  )
+glimpse(math_an_modified)
+```
+
+```         
+```
+
+## Anxiety based on Gender
+
+Groups the data by Gender and calculates the average scores for the AMAS and RCMAS, along with the count for each gender.
+
+```{r}
+math_an_modified %>%
+  group_by(Gender) %>%
+  summarize(average_AMAS = mean(AMAS),average_RCMAS = mean(RCMAS), count = n())
+```
+
+This analysis indicates that male participants generally have lower average scores on both scales compared to female participants, suggesting that females experience higher levels of math anxiety.
+
+## Anxiety based on Age
+
+Groups the data by Age and calculates the average scores for the AMAS and RCMAS, along with the count for each age group.
+
+```{r}
+math_an_modified %>%
+  group_by(Age) %>%
+  summarize(average_AMAS = mean(AMAS),average_RCMAS = mean(RCMAS), count = n())
+```
+
+The results reveal that older age groups tend to have higher average scores on both the AMAS and RCMAS, indicating that math anxiety may increase with age.
+
+## Anxiety based on Grade
+
+Groups the data by Grade and calculates the average scores for the AMAS and RCMAS, along with the count for each grade level.
+
+```{r}
+math_an_modified %>%
+  group_by(Grade) %>%
+  summarize(average_AMAS = mean(AMAS),average_RCMAS = mean(RCMAS), count = n())
+```
+
+The results show that primary school students have slightly higher average scores on the RCMAS compared to secondary school students, suggesting that younger students may experience greater levels of math anxiety, despite secondary school students having a higher average on the AMAS.
+
+## Anxiety based on Gender & Grade
+
+Groups the data by Gender and Grade, calculating the average AMAS and RCMAS scores, along with the count for each gender and grade combination.
+
+```{r}
+math_an_modified %>% group_by(Gender, Grade) %>% summarize(average_AMAS = mean(AMAS),average_RCMAS = mean(RCMAS), count = n())
+```
+
+The analysis shows that girls, in both primary and secondary grades, have higher average anxiety scores on the AMAS and RCMAS scales compared to boys. Secondary school girls have the highest anxiety, while boys in both grades have lower anxiety scores.
+
+## Conclusion
+
+The analysis reveals that female students, especially those in secondary grades, experience higher math anxiety than males across all measures. Additionally, younger students exhibit higher anxiety on the RCMAS scale, while older students show slightly increased anxiety on the AMAS scale.

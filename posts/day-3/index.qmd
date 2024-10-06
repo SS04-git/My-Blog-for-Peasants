@@ -1,0 +1,451 @@
+---
+title: "Counts"
+author: "Sara S"
+---
+
+## Installing and importing packages
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(mosaic)
+library(ggformula)
+library(skimr)
+```
+
+## Dataset: Taxi
+
+```{r}
+taxi <- read_csv("https://vincentarelbundock.github.io/Rdatasets/csv/modeldata/taxi.csv")
+taxi
+```
+
+## Organizing the data
+
+```{r}
+glimpse(taxi)
+```
+
+```{r}
+skim(taxi)
+```
+
+```{r}
+inspect(taxi)
+```
+
+### **Data Munging to make ordinal factors**
+
+Qualitative variables such as day of the week (DOW), local trip, tip and month are converted into ordered factors.
+
+```{r}
+taxi_modified <- taxi %>%
+  mutate(
+    dow = factor(dow,
+      levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
+      labels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
+      ordered = TRUE
+    ),
+    ##
+    local = factor(local,
+      levels = c("no", "yes"),
+      labels = c("no", "yes"),
+      ordered = TRUE
+    ),
+    ##
+    tip = factor(tip,
+      levels = c("no", "yes"),
+      labels = c("no", "yes"),
+      ordered = TRUE
+    ),
+    ##
+    month = factor(month,
+      levels = c("Jan", "Feb", "Mar", "Apr"),
+      labels = c("Jan", "Feb", "Mar", "Apr"),
+      ordered = TRUE
+    )
+  )
+taxi_modified %>% glimpse()
+```
+
+```         
+ 
+```
+
+## Graphs: **Do more people tip than not?**
+
+```{r}
+gf_bar(~tip, data = taxi_modified) %>%
+  gf_labs(title = "Plot 1: Counts of Tips")
+```
+
+The majority of rides resulted in tips, suggesting a positive tipping culture for taxi riders.
+
+```         
+```
+
+## Graphs: **Does the tip depend upon whether the trip is local or not? (colour for outline and dodge)**
+
+Notes:
+
+-   'color =\~something' colours the outline of the column.
+
+-   Dodged bar graphs have a column for each group or data.
+
+```{r}
+taxi_modified %>%
+  gf_bar(~local,
+    color = ~tip,
+    position = "dodge"
+  ) %>%
+  gf_labs(title = "Plot 2A: Dodged Bar Chart")
+```
+
+This bar chart visualizes the number of trips that received tips versus those that didn’t, separated by whether the trip was local. Tips are slightly more frequent for local trips, indicating that passengers may be more inclined to tip for shorter trips.
+
+## Graphs: **Does the tip depend upon whether the trip is local or not? (fill and dodge)**
+
+This chart displays the same as the above. The difference is the overall visual of it.
+
+Notes:
+
+-   'fill =\~something' is used to fill the bars with different colors based on the values of the variable.
+
+-   'gf_refine(scale_fill_manual(values = c("some colour")))' provides the colours defined rather than using the default one.
+
+```{r}
+taxi_modified %>%
+  gf_bar(~local,
+    fill = ~tip,
+    position = "dodge"
+  ) %>%
+  gf_labs(title = "Plot 2B: Dodged Bar Chart") %>% 
+    gf_refine(scale_fill_manual(values = c("darkblue", "brown")))
+```
+
+## Graphs: **Does the tip depend upon whether the trip is local or not? (fill and stack)**
+
+Same as above but stacked.
+
+Notes: Stacked bar graphs combines both groups into a single column.
+
+```{r}
+taxi_modified %>%
+  gf_bar(~local,
+    fill = ~tip,
+    position = "stack"
+  ) %>%
+  gf_labs(title = "Plot 2C: Stacked Bar Chart") %>% 
+    gf_refine(scale_fill_manual(values = c("darkblue", "brown")))
+```
+
+## Graphs: **Are the tips more or less on local trips?(using fill for position to compare in ratio)**
+
+Same as above but a filled version.
+
+Notes: Fill for position in a bar chart specifies that the bars should be stacked on top of each other and scaled to a height of 1 (or 100%).
+
+```{r}
+taxi_modified %>%
+  gf_bar(~local,
+    fill = ~tip,
+    position = "fill"
+  ) %>%
+  gf_labs(
+    title = "Plot 2D: Filled Bar Chart",
+    subtitle = "Shows Per group differences in Proportions!"
+  )%>% 
+    gf_refine(scale_fill_manual(values = c("darkblue", "brown")))
+```
+
+## Graphs: **Are the tips more or less for different companies?(using fill for position to compare in ratio)**
+
+```{r}
+taxi_modified %>%
+  gf_bar(~company,
+    fill = ~tip,
+    position = "fill"
+  ) %>%
+  gf_labs(
+    title = "Plot 3A: Filled Bar Chart",
+    subtitle = "Shows Per group differences in Proportions!"
+  )%>% 
+    gf_refine(scale_fill_manual(values = c("darkgreen", "maroon"))) %>% 
+  gf_theme(theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1)))
+```
+
+It shows the proportion of tipped versus non-tipped rides for each taxi company. Some companies show a higher proportion of tips, indicating differences in service quality or customer behavior.
+
+## Graphs: **Does a tip depend upon the distance by hour?**
+
+It shows the tipping during certain hours, especially in the evening, which may relate to customer satisfaction or needs at those times.
+
+```{r}
+gf_bar(~hour, fill = ~tip, data = taxi_modified) %>%
+  gf_labs(title = "Plot 3B: Counts of Tips by Hour") %>% 
+      gf_refine(scale_fill_manual(values = c("darkgreen", "maroon"))) 
+```
+
+## Graphs: **Does a tip depend upon the distance by DOW?**
+
+```{r}
+gf_bar(~dow, fill = ~tip, data = taxi_modified, position = "fill") %>%
+  gf_labs(title = "Plot 3C: Counts of Tips by Day of Week") %>% 
+      gf_refine(scale_fill_manual(values = c("darkgreen", "maroon"))) 
+```
+
+This filled bar chart shows tipping behavior across different days of the week. Weekends tend to show higher tipping proportions.
+
+## Graphs: **Does a tip depend upon the distance by Month?**
+
+```{r}
+gf_bar(~month, fill = ~tip, data = taxi_modified) %>%
+  gf_labs(title = "Plot 3D: Counts of Tips by Month") %>% 
+      gf_refine(scale_fill_manual(values = c("darkgreen", "maroon"))) 
+```
+
+The data shows changes in tipping behavior, with some months having more tips, likely due to seasonal effects or events.
+
+## Graphs: **Does a tip depend upon the distance by DOW and Month?(taking the graph for month and slicing it by dow)**
+
+This plot slices the data by day of the week and month, providing a comparison of tipping behavior across different days and months.
+
+Notes: '\~xaxis\|something' means that the graphs are being segregated into multiple charts.
+
+```{r}
+gf_bar(~ month | dow, fill = ~tip, data = taxi_modified) %>%
+  gf_labs(title = "Plot 3E: Counts of Tips by Day of Week and Month")%>% 
+      gf_refine(scale_fill_manual(values = c("darkgreen", "maroon"))) 
+```
+
+## Graphs: **Does a tip depend upon the distance by Hour and DOW?(taking the graph for dow and slicing it by hour)**
+
+This charts shows variations of both the hour of the day and the day of the week.
+
+```{r}
+gf_bar(~ dow | hour, fill = ~tip, data = taxi_modified, position = "fill") %>%
+  gf_labs(
+    title = "Plot 3F: Counts of Tips by Hour and Day of Week",
+    subtitle = "Is this plot arrangement easy to grasp?"
+  )%>% 
+      gf_refine(scale_fill_manual(values = c("darkgreen", "maroon"))) %>% 
+  gf_theme(theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1))) %>% 
+  gf_theme(theme(axis.text.y = element_text(size = 6, hjust = 1)))
+```
+
+## Graphs: **Does a tip depend upon the distance by Hour and DOW?(taking the graph for hour and slicing it by dow)**
+
+Same as the above but facetted by dow.
+
+```{r}
+gf_bar(~ hour | dow, fill = ~tip, data = taxi_modified, position = "fill") %>%
+  gf_labs(
+     title = "Plot 3G: Counts of Tips by Hour and Day of Week",
+    subtitle = "Swapped the Facets"
+  )%>% 
+      gf_refine(scale_fill_manual(values = c("darkgreen", "maroon"))) %>% 
+  gf_theme(theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1))) %>% 
+  gf_theme(theme(axis.text.y = element_text(size = 6, hjust = 1)))
+```
+
+## Conclusion
+
+The visualizations reveal clear patterns in tipping behavior. Local trips usually receive more tips than non-local ones, with peaks during evening hours, especially on weekends. Some taxi companies also see a higher percentage of tips. By analyzing factors like time, day, and company, we can understand what influences tipping.
+
+## Dataset: Helprct
+
+```{r}
+data("HELPrct")
+HELPrct
+```
+
+```{r}
+HELPrct %>% gf_bar(~substance) 
+```
+
+```{r}
+HELPrct %>% gf_bar(~substance,fill = ~sex)%>% 
+  gf_refine(scale_fill_manual(values = c("orange","blue")))
+```
+
+## Dataset: Banned Author Titles
+
+This is a dataset containing details of banned books in the U.S including information on their authors, the states and districts where they have been banned, the reasons for the bans, and more.
+
+```{r}
+books <- read_csv("../../data/banned-author-title.csv")
+books
+```
+
+## Organizing data
+
+Organizing the dataset is essential for effective analysis of book bans.
+
+```{r}
+glimpse(books)
+```
+
+```{r}
+inspect(books)
+```
+
+```{r}
+skim(books)
+```
+
+```{r}
+books_modified <- books %>%
+  dplyr::mutate(
+    ban = as_factor(`Type of Ban`),
+    state = as_factor(State),
+    district = as_factor(District),
+    date = as_factor(`Date of Challenge/Removal`),
+    origin = as_factor(`Origin of Challenge`)
+  )
+glimpse(books_modified)
+```
+
+## State-Wise Distribution of Banned Books
+
+This plot shows how banned books are spread across different states. By looking at the total number of bans, we can spot which states experience the most censorship.
+
+```{r}
+gf_bar(~state, data = books_modified) %>%
+  gf_labs(title = "Plot 1: States with most amount of Banned Books")%>% 
+  gf_theme(theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1)))
+```
+
+## Types of Bans in Each State
+
+This bar chart breaks down the various types of bans imposed on books in each state, such as bans in classrooms and libraries.
+
+```{r}
+gf_bar(~state, fill = ~ban, data = books_modified) %>%
+  gf_labs(title = "Plot 2: Types of ban in each state")%>% 
+  gf_theme(theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1)))%>% 
+    gf_refine(scale_fill_manual(values = c("black", "darkblue", "brown", "red")))
+```
+
+## Top 5 States with Banned Books
+
+This plot focuses on the various kinds of bans in states with highest number of bans.
+
+Notes:
+
+-   'group_by(something)' groups the dataset by the specified data column.
+
+-   'summarize(n = n())' calculates how many records of the data exist and stores this count in n.
+
+-   'slice_max(n, n = 5)' selects the top 5 records based on the values in the n column, regardless of what data is being plotted.
+
+-   'pull(something)' extracts the mentioned data column from the dataset, showing only the variables corresponding to the values in n.
+
+-   'filter(something %in% top_something)' keeps only the rows where the mentioned data is in the 'top_something' list.
+
+```{r}
+top_states <- books_modified %>%
+  group_by(state) %>%
+  summarize(n = n()) %>%
+  slice_max(n, n = 5) %>%
+  pull(state)
+
+books_modified %>%
+  filter(state %in% top_states) %>%  
+  gf_bar(~state, fill = ~ban) %>%
+  gf_labs(title = "Plot 3A: Types of Bans in Top 5 States") %>% 
+  gf_theme(theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1))) %>% 
+  gf_refine(scale_fill_manual(values = c("black", "darkblue", "brown", "red")))
+```
+
+This graph demonstrates the same information as above but uses a different method of displaying by facetting the types of bans to provide a clearer picture for each state.
+
+```{r}
+books_modified %>%
+  filter(state %in% top_states) %>%  
+  gf_bar(~state|ban) %>%
+  gf_labs(title = "Plot 3B: Types of Bans in Top 5 States") %>% 
+  gf_theme(theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1)))
+```
+
+## Number of books banned in the Top 5 Districts of the Top 3 States
+
+This explores the number of banned books in the top five districts of the top three states.
+
+```{r}
+t_states <- books_modified %>%
+  group_by(state) %>%
+  summarize(n = n()) %>%
+  slice_max(n, n = 3) %>%
+  pull(state)
+
+top_districts <- books_modified %>%
+  filter(state %in% top_states) %>%
+  group_by(district) %>%         
+  summarize(n = n()) %>%
+  slice_max(n, n = 5) %>%        
+  pull(district)
+
+books_modified %>%
+  filter(state %in% t_states) %>%    
+  filter(district %in% top_districts) %>%  
+  gf_bar(~district | state) %>%
+  gf_labs(title = "Plot 4: Top 5 Districts in Top 3 States") %>% 
+  gf_theme(theme(axis.text.x = element_text(size = 6, angle = 90, hjust = 1)))
+```
+
+## Frequency of Book Challenges/Removals Over Time
+
+This bar chart displays how often different types of bans occur in the top states. By visualizing this data, it identifies the most common types of bans and provides insights into what drives censorship in various regions.
+
+```{r}
+books_modified %>%
+  filter(state %in% top_states) %>%
+  gf_bar(~ban, data = ., fill = ~state) %>%  # Bar chart for types of bans
+  gf_labs(title = "Plot 5: Frequency of Book Challenges by Type of Ban in Top States") %>%
+  gf_theme(theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1)))%>% 
+  gf_refine(scale_fill_manual(values = c("black", "darkblue", "brown", "red", "orange")))
+```
+
+## Origin of Book Challenges in the Top 5 States
+
+This plot shows where book challenges are originating from in the top states.
+
+```{r}
+books_modified %>%
+  filter(state %in% top_states) %>%  
+  gf_bar(~state | origin, data = books_modified, position = "fill") %>%
+  gf_labs(title = "Plot 6: Origin of book challenges in different States") %>% 
+  gf_theme(theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1)))
+```
+
+## Correlation Between Ban Type and Origin of Challenges
+
+This chart explores the link between the types of bans and the origins of book challenges in the top states. By stacking the data, it reveals how different sources contribute to each type of ban.
+
+```{r}
+books_modified %>%
+  filter(state %in% top_states) %>%
+  gf_bar(~state, fill = ~origin, color = ~ban, position = "stack") %>%  
+  gf_labs(title = "Plot 7: Types of Bans and Origins of Challenges by State") %>% 
+  gf_theme(theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1)))%>% 
+  gf_refine(scale_fill_manual(values = c("darkred", "orange")))
+```
+
+## Most Frequently Challenged Authors
+
+This plot highlights the authors most frequently challenged due to book bans. By showing how often certain authors are targeted, it reveals who is most impacted by censorship and which works are being scrutinized.
+
+```{r}
+books_modified %>%
+  group_by(Author, ban) %>%         
+  summarize(n = n(), .groups = 'drop') %>%
+  slice_max(n, n = 15) %>%          
+  gf_bar(~Author, data = ., fill = ~ban) %>%
+  gf_labs(title = "Plot 8: Most Frequently Challenged Authors") %>%
+  gf_theme(theme(axis.text.x = element_text(size = 6, angle = 45, hjust = 1))) %>% 
+  gf_refine(scale_fill_manual(values = c("black", "darkblue", "brown")))
+```
+
+## Conclusion
+
+The analysis reveals that Texas, Florida, and Pennsylvania lead the way in terms of the highest number of banned books, with Texas districts like Houston and Dallas facing concentrated challenges. Classroom and library bans dominate in these states. Additionally, the data reveals that districts like Houston ISD in Texas and Orange County in Florida face concentrated challenges. Authors such as Toni Morrison and George Orwell are frequently targeted, reflecting ongoing scrutiny of their literary works.

@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Sara">
+<meta name="author" content="Sara S">
 
-<title>Day 2(Summaries) – My-Blog</title>
+<title>Summaries – My-Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -148,7 +148,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Day 2(Summaries)</h1>
+      <h1 class="title">Summaries</h1>
                       </div>
   </div>
     
@@ -158,7 +158,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Sara </p>
+               <p>Sara S </p>
             </div>
     </div>
       
@@ -178,14 +178,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>This is the work done for day 2 where we summarized data including mpg.</p>
-</section>
-<section id="import-packages" class="level2">
-<h2 class="anchored" data-anchor-id="import-packages">Import packages</h2>
-<p>Always place ‘#| label: setup’ before calling the packages.</p>
-<p>Also, one has to install packages at the console below using : install.packages(““).</p>
+<section id="installing-and-importing-packages" class="level2">
+<h2 class="anchored" data-anchor-id="installing-and-importing-packages">Installing and Importing packages</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -259,8 +253,8 @@ The following object is masked from 'package:dplyr':
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(babynames)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="mpg-dataset" class="level2">
-<h2 class="anchored" data-anchor-id="mpg-dataset">Mpg Dataset</h2>
+<section id="dataset-mpg" class="level2">
+<h2 class="anchored" data-anchor-id="dataset-mpg">Dataset: Mpg</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mpg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -281,8 +275,9 @@ The following object is masked from 'package:dplyr':
 </div>
 </div>
 </section>
-<section id="filtering-the-data1st-10" class="level2">
-<h2 class="anchored" data-anchor-id="filtering-the-data1st-10">Filtering the data(1st 10)</h2>
+<section id="filtering-the-datatop-10" class="level2">
+<h2 class="anchored" data-anchor-id="filtering-the-datatop-10">Filtering the data(top 10)</h2>
+<p>Retrieves the first 10 rows of the dataset</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -305,6 +300,12 @@ The following object is masked from 'package:dplyr':
 </section>
 <section id="using-glimpse-mosaic-skimr-and-mutate-to-organize-data" class="level2">
 <h2 class="anchored" data-anchor-id="using-glimpse-mosaic-skimr-and-mutate-to-organize-data">Using glimpse, mosaic, skimr and mutate to organize data</h2>
+<p>Notes:</p>
+<ul>
+<li><p>Glimpse offers a brief overview of the dataset structure, showing the variable names and types for better understanding.</p></li>
+<li><p>Inspect function from the mosaic package provides a detailed summary of the dataset’s columns, including basic statistics like levels.</p></li>
+<li><p>Skim delivers a comprehensive summary of the dataset, detailing counts, means, and distribution metrics for each variable.</p></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(mpg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -589,6 +590,16 @@ quantitative variables:
 </table>
 </div>
 </div>
+</section>
+<section id="factorizing-data" class="level2">
+<h2 class="anchored" data-anchor-id="factorizing-data">Factorizing data</h2>
+<p>It converts qualitative data into factors.</p>
+<p>Notes:</p>
+<ul>
+<li><p>‘something_modified &lt;- something’ creates a new dataset by taking the existing dataset and preparing it for further modifications.</p></li>
+<li><p>‘dplyr::mutate’ is the mutate function from the dplyr package, which is used to create or modify columns in a dataframe.</p></li>
+<li><p>‘something = as_factor(something)’ converts the column from int or chr to a factor.</p></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>mpg_modified <span class="ot">&lt;-</span> mpg <span class="sc">%&gt;%</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
@@ -616,10 +627,93 @@ $ class        &lt;fct&gt; compact, compact, compact, compact, compact, compact,
 </div>
 </div>
 </section>
-<section id="trying-with-another-dataset" class="level2">
-<h2 class="anchored" data-anchor-id="trying-with-another-dataset">Trying with another dataset</h2>
+<section id="grouped-by-cly" class="level2">
+<h2 class="anchored" data-anchor-id="grouped-by-cly">Grouped by cly</h2>
+<p>This groups the modified dataset by the number of cylinders (cyl) and calculates the average highway miles per gallon (average_hwy) along with the count of cars in each group.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>babynames</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>mpg_modified <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cyl) <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_hwy =</span> <span class="fu">mean</span>(hwy), <span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+  cyl   average_hwy count
+  &lt;fct&gt;       &lt;dbl&gt; &lt;int&gt;
+1 4            28.8    81
+2 5            28.8     4
+3 6            22.8    79
+4 8            17.6    70</code></pre>
+</div>
+</div>
+</section>
+<section id="grouping-with-cyl-and-fl" class="level2">
+<h2 class="anchored" data-anchor-id="grouping-with-cyl-and-fl">Grouping with cyl and fl</h2>
+<p>It groups the dataset by both the number of cylinders (cyl) and fuel type (fl) calculating the average highway miles per gallon (average_hwy) along with the count of cars in each group.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>mpg_modified <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cyl, fl) <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_hwy =</span> <span class="fu">mean</span>(hwy), <span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'cyl'. You can override using the `.groups`
+argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 × 4
+# Groups:   cyl [4]
+   cyl   fl    average_hwy count
+   &lt;fct&gt; &lt;fct&gt;       &lt;dbl&gt; &lt;int&gt;
+ 1 4     p            27.8    22
+ 2 4     r            28.3    55
+ 3 4     d            43       3
+ 4 4     c            36       1
+ 5 5     r            28.8     4
+ 6 6     p            25.3    17
+ 7 6     r            22.2    60
+ 8 6     e            17       1
+ 9 6     d            22       1
+10 8     p            20.8    13
+11 8     r            17.5    49
+12 8     e            12.7     7
+13 8     d            17       1</code></pre>
+</div>
+</div>
+</section>
+<section id="grouping-by-manufacturer" class="level2">
+<h2 class="anchored" data-anchor-id="grouping-by-manufacturer">Grouping by manufacturer</h2>
+<p>It groups the mpg dataset by manufacturer, calculating the average city miles per gallon (average_cty) and the count of models from each manufacturer.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(manufacturer) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_cty =</span> <span class="fu">mean</span>(cty), <span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 15 × 3
+   manufacturer average_cty count
+   &lt;chr&gt;              &lt;dbl&gt; &lt;int&gt;
+ 1 audi                17.6    18
+ 2 chevrolet           15      19
+ 3 dodge               13.1    37
+ 4 ford                14      25
+ 5 honda               24.4     9
+ 6 hyundai             18.6    14
+ 7 jeep                13.5     8
+ 8 land rover          11.5     4
+ 9 lincoln             11.3     3
+10 mercury             13.2     4
+11 nissan              18.1    13
+12 pontiac             17       5
+13 subaru              19.3    14
+14 toyota              18.5    34
+15 volkswagen          20.9    27</code></pre>
+</div>
+</div>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The analysis of the mpg dataset shows important trends in fuel efficiency related to vehicle features. Converting numeric variables into factors helps with the analysis, and grouping operations offer clear averages and counts.</p>
+</section>
+<section id="dataset-babynames" class="level2">
+<h2 class="anchored" data-anchor-id="dataset-babynames">Dataset: Babynames</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>babynames</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1,924,665 × 5
     year sex   name          n   prop
@@ -638,7 +732,7 @@ $ class        &lt;fct&gt; compact, compact, compact, compact, compact, compact,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>babynames <span class="sc">%&gt;%</span> <span class="fu">filter</span> (name <span class="sc">==</span> <span class="st">"Sara"</span>) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>babynames <span class="sc">%&gt;%</span> <span class="fu">filter</span> (name <span class="sc">==</span> <span class="st">"Sara"</span>) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 15 × 5
     year sex   name      n    prop
@@ -661,10 +755,10 @@ $ class        &lt;fct&gt; compact, compact, compact, compact, compact, compact,
 </div>
 </div>
 </section>
-<section id="using-glimpse-mosaic-skimr-and-mutate-to-organize-data-1" class="level2">
-<h2 class="anchored" data-anchor-id="using-glimpse-mosaic-skimr-and-mutate-to-organize-data-1">Using glimpse, mosaic, skimr and mutate to organize data</h2>
+<section id="using-glimpse-mosaic-skimr-to-organize-data" class="level2">
+<h2 class="anchored" data-anchor-id="using-glimpse-mosaic-skimr-to-organize-data">Using glimpse, mosaic, skimr to organize data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>babynames<span class="sc">%&gt;%</span> mosaic<span class="sc">::</span><span class="fu">inspect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>babynames<span class="sc">%&gt;%</span> mosaic<span class="sc">::</span><span class="fu">inspect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 categorical variables:  
@@ -687,7 +781,7 @@ quantitative variables:
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>babynames <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>babynames <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 1,924,665
 Columns: 5
@@ -698,12 +792,15 @@ $ n    &lt;int&gt; 7065, 2604, 2003, 1939, 1746, 1578, 1472, 1414, 1320, 1288, 1
 $ prop &lt;dbl&gt; 0.07238359, 0.02667896, 0.02052149, 0.01986579, 0.01788843, 0.016…</code></pre>
 </div>
 </div>
+</section>
+<section id="factorizing-data-1" class="level2">
+<h2 class="anchored" data-anchor-id="factorizing-data-1">Factorizing data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>babynames_modified <span class="ot">&lt;-</span> babynames <span class="sc">%&gt;%</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sex =</span> <span class="fu">as_factor</span>(sex)</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(babynames_modified)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>babynames_modified <span class="ot">&lt;-</span> babynames <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sex =</span> <span class="fu">as_factor</span>(sex)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(babynames_modified)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 1,924,665
 Columns: 5
@@ -715,7 +812,7 @@ $ prop &lt;dbl&gt; 0.07238359, 0.02667896, 0.02052149, 0.01986579, 0.01788843, 0
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>babynames <span class="sc">%&gt;%</span> skimr<span class="sc">::</span><span class="fu">skim</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>babynames <span class="sc">%&gt;%</span> skimr<span class="sc">::</span><span class="fu">skim</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <caption>Data summary</caption>
@@ -880,81 +977,17 @@ $ prop &lt;dbl&gt; 0.07238359, 0.02667896, 0.02052149, 0.01986579, 0.01788843, 0
 </div>
 </div>
 </section>
-<section id="grouped-for-columns-using-mpg-dataset" class="level2">
-<h2 class="anchored" data-anchor-id="grouped-for-columns-using-mpg-dataset">Grouped for columns (using mpg dataset)</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>mpg_modified <span class="sc">%&gt;%</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cyl) <span class="sc">%&gt;%</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_hwy =</span> <span class="fu">mean</span>(hwy), <span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 3
-  cyl   average_hwy count
-  &lt;fct&gt;       &lt;dbl&gt; &lt;int&gt;
-1 4            28.8    81
-2 5            28.8     4
-3 6            22.8    79
-4 8            17.6    70</code></pre>
-</div>
-</div>
+<section id="conclusion-1" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-1">Conclusion</h2>
+<p>The examination of the babynames dataset reveals significant patterns in naming trends. By filtering for the name “Sara” and converting the qualitative variable into a factor, the data becomes more organized and easier to analyze.</p>
 </section>
-<section id="grouping-with-cyl-and-fl" class="level2">
-<h2 class="anchored" data-anchor-id="grouping-with-cyl-and-fl">Grouping with cyl and fl</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>mpg_modified <span class="sc">%&gt;%</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cyl, fl) <span class="sc">%&gt;%</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_hwy =</span> <span class="fu">mean</span>(hwy), <span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`summarise()` has grouped output by 'cyl'. You can override using the `.groups`
-argument.</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 13 × 4
-# Groups:   cyl [4]
-   cyl   fl    average_hwy count
-   &lt;fct&gt; &lt;fct&gt;       &lt;dbl&gt; &lt;int&gt;
- 1 4     p            27.8    22
- 2 4     r            28.3    55
- 3 4     d            43       3
- 4 4     c            36       1
- 5 5     r            28.8     4
- 6 6     p            25.3    17
- 7 6     r            22.2    60
- 8 6     e            17       1
- 9 6     d            22       1
-10 8     p            20.8    13
-11 8     r            17.5    49
-12 8     e            12.7     7
-13 8     d            17       1</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(manufacturer) <span class="sc">%&gt;%</span> </span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_cty =</span> <span class="fu">mean</span>(cty), <span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 15 × 3
-   manufacturer average_cty count
-   &lt;chr&gt;              &lt;dbl&gt; &lt;int&gt;
- 1 audi                17.6    18
- 2 chevrolet           15      19
- 3 dodge               13.1    37
- 4 ford                14      25
- 5 honda               24.4     9
- 6 hyundai             18.6    14
- 7 jeep                13.5     8
- 8 land rover          11.5     4
- 9 lincoln             11.3     3
-10 mercury             13.2     4
-11 nissan              18.1    13
-12 pontiac             17       5
-13 subaru              19.3    14
-14 toyota              18.5    34
-15 volkswagen          20.9    27</code></pre>
-</div>
-</div>
-</section>
-<section id="math-anxiety-data" class="level2">
-<h2 class="anchored" data-anchor-id="math-anxiety-data">Math Anxiety Data</h2>
+<section id="dataset-math-anxiety" class="level2">
+<h2 class="anchored" data-anchor-id="dataset-math-anxiety">Dataset: Math Anxiety</h2>
+<p>Notes:</p>
+<ul>
+<li><p>‘read_delim’ is for reading text files that have semicolons.</p></li>
+<li><p>‘read_csv’ is for reading a csv file stored on the device.</p></li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>math_an <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"../../data/MathAnxiety.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -989,6 +1022,7 @@ num (1): Age
 </section>
 <section id="organizing-data" class="level2">
 <h2 class="anchored" data-anchor-id="organizing-data">Organizing Data</h2>
+<p>Provides an overview of the dataset’s structure, including data types, variable details, counts,etc.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>math_an <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1208,6 +1242,7 @@ quantitative variables:
 </section>
 <section id="factorizing" class="level2">
 <h2 class="anchored" data-anchor-id="factorizing">Factorizing</h2>
+<p>Converting qualitative data columns into factors.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>math_an_modified <span class="ot">&lt;-</span> math_an <span class="sc">%&gt;%</span></span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
@@ -1231,6 +1266,7 @@ $ `Arith,` &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 
 </section>
 <section id="anxiety-based-on-gender" class="level2">
 <h2 class="anchored" data-anchor-id="anxiety-based-on-gender">Anxiety based on Gender</h2>
+<p>Groups the data by Gender and calculates the average scores for the AMAS and RCMAS, along with the count for each gender.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>math_an_modified <span class="sc">%&gt;%</span></span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Gender) <span class="sc">%&gt;%</span></span>
@@ -1243,9 +1279,11 @@ $ `Arith,` &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 
 2 Girl           22.9          20.6   276</code></pre>
 </div>
 </div>
+<p>This analysis indicates that male participants generally have lower average scores on both scales compared to female participants, suggesting that females experience higher levels of math anxiety.</p>
 </section>
 <section id="anxiety-based-on-age" class="level2">
 <h2 class="anchored" data-anchor-id="anxiety-based-on-age">Anxiety based on Age</h2>
+<p>Groups the data by Age and calculates the average scores for the AMAS and RCMAS, along with the count for each age group.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>math_an_modified <span class="sc">%&gt;%</span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Age) <span class="sc">%&gt;%</span></span>
@@ -1267,9 +1305,11 @@ $ `Arith,` &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 
 # ℹ 381 more rows</code></pre>
 </div>
 </div>
+<p>The results reveal that older age groups tend to have higher average scores on both the AMAS and RCMAS, indicating that math anxiety may increase with age.</p>
 </section>
 <section id="anxiety-based-on-grade" class="level2">
 <h2 class="anchored" data-anchor-id="anxiety-based-on-grade">Anxiety based on Grade</h2>
+<p>Groups the data by Grade and calculates the average scores for the AMAS and RCMAS, along with the count for each grade level.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>math_an_modified <span class="sc">%&gt;%</span></span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Grade) <span class="sc">%&gt;%</span></span>
@@ -1282,13 +1322,13 @@ $ `Arith,` &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 
 2 Primary           21.8          19.6   401</code></pre>
 </div>
 </div>
+<p>The results show that primary school students have slightly higher average scores on the RCMAS compared to secondary school students, suggesting that younger students may experience greater levels of math anxiety, despite secondary school students having a higher average on the AMAS.</p>
 </section>
 <section id="anxiety-based-on-gender-grade" class="level2">
 <h2 class="anchored" data-anchor-id="anxiety-based-on-gender-grade">Anxiety based on Gender &amp; Grade</h2>
+<p>Groups the data by Gender and Grade, calculating the average AMAS and RCMAS scores, along with the count for each gender and grade combination.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>math_an_modified <span class="sc">%&gt;%</span></span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Gender, Grade) <span class="sc">%&gt;%</span></span>
-<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_AMAS =</span> <span class="fu">mean</span>(AMAS),<span class="at">average_RCMAS =</span> <span class="fu">mean</span>(RCMAS), <span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>math_an_modified <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Gender, Grade) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">average_AMAS =</span> <span class="fu">mean</span>(AMAS),<span class="at">average_RCMAS =</span> <span class="fu">mean</span>(RCMAS), <span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`summarise()` has grouped output by 'Gender'. You can override using the
 `.groups` argument.</code></pre>
@@ -1304,6 +1344,11 @@ $ `Arith,` &lt;dbl&gt; 6, 6, 5, 7, 1, 1, 4, 7, 2, 6, 2, 5, 2, 6, 2, 7, 2, 4, 7, 
 4 Girl   Primary           22.7          20.6   202</code></pre>
 </div>
 </div>
+<p>The analysis shows that girls, in both primary and secondary grades, have higher average anxiety scores on the AMAS and RCMAS scales compared to boys. Secondary school girls have the highest anxiety, while boys in both grades have lower anxiety scores.</p>
+</section>
+<section id="conclusion-2" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-2">Conclusion</h2>
+<p>The analysis reveals that female students, especially those in secondary grades, experience higher math anxiety than males across all measures. Additionally, younger students exhibit higher anxiety on the RCMAS scale, while older students show slightly increased anxiety on the AMAS scale.</p>
 
 
 </section>
