@@ -1,0 +1,8 @@
+---
+title: "Groups"
+author: "Sara S"
+---
+
+## Introduction 
+
+this is to check if my git works
