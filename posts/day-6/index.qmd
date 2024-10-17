@@ -1,0 +1,18 @@
+---
+title: "Samples, Populations, Statistics and Inference"
+author: "Sara S"
+---
+
+```{r}
+library(tidyverse) 
+library(mosaic) 
+library(skimr) 
+library(ggformula) 
+
+library(NHANES)
+library(infer)
+```
+
+n, pop mean, pop_sd, standard error
+
+ronald fisher

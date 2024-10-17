@@ -3,6 +3,249 @@ title: "Groups"
 author: "Sara S"
 ---
 
-## Introduction 
+## Installing packages
 
-this is to check if my git works
+```{r}
+library(tidyverse)
+library(mosaic)
+library(ggformula)
+library(skimr)
+library(palmerpenguins)
+```
+
+## Dataset: Wages
+
+```{r}
+wages <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/stevedata/gss_wages.csv")
+```
+
+## Organizing the data
+
+```{r}
+glimpse(wages)
+```
+
+```{r}
+inspect(wages)
+```
+
+```{r}
+skimr:: skim(wages)
+```
+
+```         
+```
+
+## Dropping the missing values
+
+```{r}
+wages_clean <-
+  wages %>%
+  tidyr::drop_na(realrinc) 
+```
+
+## Distribution of realrinc
+
+Notes: Properties of boxplot are as follows-
+
+-   Median (Middle Line in the Box): The line inside the box represents the median, dividing the data into two halves.
+
+-   Interquartile Range (IQR): The box spans from the first quartile (Q1, 25th percentile) to the third quartile (Q3, 75th percentile), covering the middle 50% of the data.
+
+-   Whiskers: These extend from Q1 down to the minimum and from Q3 up to the maximum values, but only within 1.5 times the IQR. Data beyond this range are considered outliers.
+
+-   Outliers: Data points outside the whiskers are shown as individual points or small markers, indicating they are significantly different from the rest of the data.
+
+-   Symmetry/Skewness: If the box is centered and the whiskers are balanced, the data is symmetric. If not, the data is skewed (longer whisker shows skew direction).
+
+```{r}
+wages_clean %>%
+  gf_boxplot(realrinc ~ "Income") %>% # Dummy X-axis "variable"
+  gf_labs(
+    title = "Plot 1A: Income has a skewed distribution",
+    subtitle = "Many outliers on the high side"
+  )
+```
+
+This box plot displays the distribution of realrinc (real income) overall. Since there is a skew in the data, with a tail on the higher end, many high-income outliers are shown. The box plot will have a longer whisker towards the high-income values, and many points beyond the whiskers, indicating those outliers.
+
+## Is realrinc affected by gender?
+
+```{r}
+wages_clean %>%
+  gf_boxplot(gender ~ realrinc) %>%
+  gf_labs(title = "Plot 2A: Income by Gender")
+```
+
+Comparing income by gender shows a noticeable difference between the two groups. The median income for males is higher than for females, and the distribution for males tends to have more variation, with a broader spread and more outliers. This shows a gender income gap, with males generally earning more than females.
+
+## Is a logged realrinc affected by gender?
+
+```{r}
+wages_clean %>%
+  gf_boxplot(gender ~ log10(realrinc)) %>%
+  gf_labs(title = "Plot 2B: Log(Income) by Gender")
+```
+
+Logging the income data 'log10(realrinc)' and plotting it by gender makes the income distribution less skewed and easier to interpret. The log transformation helps to compress the extreme values.
+
+## Is realrinc affected by gender when x-axis is logged?
+
+```{r}
+wages_clean %>%
+  gf_boxplot(gender ~ realrinc, fill = ~gender) %>%
+  gf_refine(scale_x_log10()) %>%
+  gf_labs(title = "Plot 2C: Income filled by Gender, log scale")
+```
+
+When applying a log scale to the x-axis, income is still higher for males than females. The fill colors differentiate between genders, and the log scale brings out the differences more clearly.
+
+## Is realrinc affected by education (educcat)?
+
+```{r}
+wages_clean %>%
+  gf_boxplot(educcat ~ realrinc) %>%
+  gf_labs(title = "Plot 3A: Income by Education Category")
+```
+
+Income distribution by education level shows that people with higher education usually earn more. There is a lot of variation within each education group, and some highly educated individuals (graduates and bachelors) earn much more than most others in their category.
+
+## Is logged realrinc affected by education (educcat)?
+
+```{r}
+wages_clean %>%
+  gf_boxplot(educcat ~ log10(realrinc)) %>%
+  gf_labs(title = "Plot 3B: Log(Income) by Education Category")
+```
+
+After applying a log transformation, the differences between education categories become clearer, and the skewness of income distributions is reduced. The higher the education level, the higher the income is and the differences between categories are more easily comparable due to the log scale.
+
+## Is realrinc affected by education (educcat) when reorder education is reordered based on the **median** of realrinc?
+
+```{r}
+wages_clean %>%
+  gf_boxplot(
+    reorder(educcat, realrinc, FUN = median) ~ log(realrinc),
+    fill = ~educcat,
+    alpha = 0.3
+  ) %>%
+  gf_labs(title = "Plot 3C: Log(Income) by Education Category, sorted") %>%
+  gf_labs(
+    x = "Log Income",
+    y = "Education Category"
+  )
+```
+
+By reordering the education categories based on the median income, the plot more clearly shows the increasing in income as education levels rise.
+
+## realrinc by education sorted by median of realrinc with a logged x-axis
+
+Notes: 'FUN = median' tells R to apply the median function to a group of values, calculating the middle value of each subset, often used for summarizing or sorting data based on average. FUN stands for function, and this function can be used for calculations like mean, sum, and more.
+
+```{r}
+wages_clean %>%
+  gf_boxplot(reorder(educcat, realrinc, FUN = median) ~ realrinc,
+    fill = ~educcat,
+    alpha = 0.5
+  ) %>%
+  gf_refine(scale_x_log10()) %>%
+  gf_labs(
+    title = "Plot 3D: Income by Education Category, sorted",
+    subtitle = "Log Income"
+  ) %>%
+  gf_labs(
+    x = "Income",
+    y = "Education Category"
+  )
+```
+
+Since the education categories sorted and the income axis logged, the income spread looks more balanced, making it easier to compare different education levels.
+
+## Is realrinc affected by combinations of factors like gender, education, marital status and number of children?
+
+```{r}
+wages %>%
+  drop_na() %>%
+  gf_boxplot(reorder(educcat, realrinc) ~ log10(realrinc),
+    fill = ~educcat,
+    alpha = 0.5
+  ) %>%
+  gf_facet_wrap(vars(childs)) %>%
+  gf_refine(scale_fill_brewer(type = "qual", palette = "Dark2")) %>%
+  gf_labs(
+    title = "Plot 4A: Log Income by Education Category and Family Size",
+    x = "Log income",
+    y = "No. of Children"
+  )
+```
+
+Individuals with more children tend to have slightly different income patterns, but education still plays a important role. The faceting by number of children shows how family size interacts with education to affect income levels.
+
+## Logged realrinc by number of children facetted by gender
+
+```{r}
+wages %>%
+  drop_na() %>%
+  mutate(childs = as_factor(childs)) %>%
+  gf_boxplot(childs ~ log10(realrinc),
+    group = ~childs,
+    fill = ~childs,
+    alpha = 0.5
+  ) %>%
+  gf_facet_wrap(~gender) %>%
+  gf_refine(scale_fill_brewer(type = "qual", palette = "Set3")) %>%
+  gf_labs(
+    title = "Plot 4B: Log Income by Gender and Family Size",
+    x = "Log income",
+    y = "No. of Children"
+  )
+```
+
+Males tend to have higher incomes regardless of family size, but the differences between family sizes vary slightly by gender. This shows that while income is influenced by both gender and family size, gender plays a more important role.
+
+## Logged realrinc by gender facetted by number of children
+
+```{r}
+wages %>%
+  drop_na() %>%
+  mutate(childs = as_factor(childs)) %>%
+  gf_boxplot(gender ~ log10(realrinc),
+    group = ~gender,
+    fill = ~gender,
+    alpha = 0.5
+  ) %>%
+  gf_facet_wrap(~childs) %>%
+  gf_refine(scale_fill_brewer(type = "qual", palette = "Set3")) %>%
+  gf_labs(
+    title = "Plot 4C: Log Income by Gender and Family Size",
+    x = "Log income",
+    y = "No. of Children"
+  )
+```
+
+In this plot, gender and income are analyzed using a log10 scale, faceted by the number of children. It highlights that males earn more than females across all family sizes, highlighting gender differences.
+
+## Logged realrinc by gender facetted by education
+
+```{r}
+wages %>%
+  drop_na() %>%
+  mutate(childs = as_factor(childs)) %>%
+  gf_boxplot(gender ~ log10(realrinc),
+    group = ~gender,
+    fill = ~gender,
+    alpha = 0.5
+  ) %>%
+  gf_facet_wrap(~educcat) %>%
+  gf_refine(scale_fill_brewer(type = "qual", palette = "Set3")) %>%
+  gf_labs(
+    title = "Plot 4C: Log Income by Gender and Family Size",
+    x = "Log income",
+    y = "No. of Children"
+  )
+```
+
+Income by gender within each education category shows that even at higher education levels, males tend to earn more than females. Even with higher education, women tend to earn less than men.
+
+```         
+```

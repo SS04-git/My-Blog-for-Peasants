@@ -36,7 +36,11 @@ gf_histogram(~price, data = diamonds) %>%
   )
 ```
 
+The histogram shows the distribution of diamond prices. It reveals that most diamonds are on the lower end of the price spectrum. There is a significant right-skewed distribution, indicating that high-priced diamonds are less frequent.
+
 ## Creating graphs according to price and bins
+
+Notes: Bins in a histogram are the intervals used to group data. They help organize data points into ranges, making it easier to see how many values fall within each range. Each bin represents a specific range of values, and the height of the bar for each bin shows the number of data points in that range.
 
 ```{r}
 gf_histogram(~price,
@@ -49,6 +53,8 @@ gf_histogram(~price,
   )
 ```
 
+Increasing the number of bins provides a more detailed view of price distribution.
+
 ## Creating graphs according to carat and bins
 
 ```{r}
@@ -59,6 +65,8 @@ diamonds %>%
     caption = "ggformula"
   )
 ```
+
+Most diamonds cluster around smaller carat sizes, with the majority falling below 1 carat. The distribution is heavily skewed, with very few diamonds exceeding 2 carats.
 
 ```{r}
 diamonds %>%
@@ -71,12 +79,18 @@ diamonds %>%
   )
 ```
 
+This histogram, with more bins, adds detail to the carat distribution.
+
 ## Creating graphs according to price and cut
+
+Notes: 'alpha= some number' refers to the transparency level of the bars. An alpha value between 0 and 1 determines how see-through the bars are.
 
 ```{r}
 gf_histogram(~price, fill = ~cut, data = diamonds) %>%
   gf_labs(title = "Plot 3A: Diamond Prices", caption = "ggformula")
 ```
+
+The distribution across all cuts remains right-skewed, though the distribution changes slightly based on the cut quality.
 
 ```{r}
 diamonds %>%
@@ -105,7 +119,11 @@ diamonds %>%
   ))
 ```
 
+Each panel shows that even the most expensive diamonds tend to belong to the "Ideal" or "Premium" categories.
+
 ## Creating graphs according to price facetted by cut with a different y-axis for each graph
+
+Notes: 'free_y' or 'free_x' means that the y-axis or x-axis can adjust independently for each panel in a plot, allowing for better visualization of data patterns without being constrained by a fixed scale.
 
 ```{r}
 diamonds %>%
@@ -125,17 +143,23 @@ diamonds %>%
   ))
 ```
 
+Using a free y-scale allows each panel to adjust its y-axis, which helps emphasize patterns in less common categories like Fair cut diamonds. This approach better highlights the density of price distributions across different cuts.
+
 ## Creating graphs according to price and clarity
 
 ```{r}
 gf_histogram(~price, fill = ~clarity, data = diamonds) %>%
-  gf_labs(title = "Plot 3A: Diamond Prices", caption = "ggformula")
+  gf_labs(title = "Plot 4A: Diamond Prices", caption = "ggformula")
 ```
+
+The distribution of prices by clarity shows that certain clarity levels like SI1 and VS2 dominate the lower price ranges, while IF (internally flawless) and higher clarity levels are generally priced higher.
 
 ```{r}
 gf_histogram(~price, fill = ~clarity, data = diamonds, color = "black", alpha = 0.7) %>%
-  gf_labs(title = "Plot 3B: Prices by Clarity", caption = "ggformula")
+  gf_labs(title = "Plot 4B: Prices by Clarity", caption = "ggformula")
 ```
+
+By facetting the data by clarity, it's easier to see the price distribution within each clarity level.
 
 ## Creating graphs according to price facetted by clarity
 
@@ -143,17 +167,19 @@ gf_histogram(~price, fill = ~clarity, data = diamonds, color = "black", alpha = 
   gf_histogram(~price, fill = ~clarity, data = diamonds, color="black", alpha =0.7) %>%
 gf_facet_wrap(~clarity) %>%
   gf_labs(
-    title = "Plot 3C: Prices by Filled and Facetted by Clarity",
+    title = "Plot 4C: Prices by Filled and Facetted by Clarity",
     caption = "ggformula"
   ) 
 ```
+
+Each clarity group reveals different price distributions, indicating how clarity affects the overall value of diamonds. Clarity grades like IF might show higher price concentrations, while lower clarity grades may display wider ranges or lower price peaks.
 
 ## Creating graphs according to price facetted by clarity with a different y-axis for each graph
 
 ```{r}
   gf_histogram(~price, fill = ~clarity, data = diamonds, color ="black", alpha=0.7) %>%gf_facet_wrap(~clarity, scales = "free_y", nrow = 3) %>%
   gf_labs(
-    title = "Plot 3D: Prices Filled and Facetted by Clarity",
+    title = "Plot 4D: Prices Filled and Facetted by Clarity",
     subtitle = "Free y-scale",
     caption = "ggformula"
   ) %>%
@@ -172,22 +198,26 @@ gf_facet_wrap(~clarity) %>%
   ))
 ```
 
+Similar to Plot 4C, but with free y-scales for each clarity category. This setup provides a clearer view of price distributions, especially in groups with very different price ranges. The varying scales show that some clarity categories, like VS1 and VS2, can have significant price variation compared to others.
+
 ## Creating graphs according to price and colour
 
 ```{r}
 diamonds %>%
   gf_histogram(~price, fill = ~color) %>%
   gf_labs(
-    title = "Plot 3A: Diamond Prices",
+    title = "Plot 5A: Diamond Prices",
     caption = "ggformula"
   )
 ```
+
+The visualization shows how color influences diamond prices, with some colors likely commanding higher prices. Color categories such as D (colorless) generally yield higher price ranges than J (faint yellow).
 
 ```{r}
 diamonds %>%
   gf_histogram(~price, fill = ~color, color = "black", alpha = 0.5) %>%
   gf_labs(
-    title = "Plot 3B: Prices by Colour",
+    title = "Plot 5B: Prices by Colour",
     caption = "ggformula"
   )
 ```
@@ -199,10 +229,12 @@ diamonds %>%
   gf_histogram(~price, fill = ~color, color = "black", alpha = 0.5) %>%
 gf_facet_wrap(~color) %>%
   gf_labs(
-    title = "Plot 3C: Prices by Filled and Facetted by Colour",
+    title = "Plot 5C: Prices by Filled and Facetted by Colour",
     caption = "ggformula"
   )
 ```
+
+Each facet represents a color category, providing a clear comparison of how each color affects pricing. Some colors may show very distinct distributions, with the colors like D and E exhibiting higher concentration in the upper price ranges.
 
 ## Creating graphs according to price facetted by colour with a different y-axis for each graph
 
@@ -214,7 +246,7 @@ diamonds %>%
   gf_histogram(~price, fill = ~color, color = "black", alpha = 0.5) %>%
 gf_facet_wrap(~color) %>%
   gf_labs(
-    title = "Plot 3D: Prices Filled and Facetted by Colour",
+    title = "Plot 5D: Prices Filled and Facetted by Colour",
     subtitle = "Free y-scale",
     caption = "ggformula"
   ) %>%
@@ -233,7 +265,7 @@ gf_facet_wrap(~color) %>%
   ))
 ```
 
-## Looking at two datasets - one for the details of various races and another named rank for the participants of the races
+## Datasets: Race(details of various races) & Rank (the participants of the races)
 
 ```{r}
 race_df <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-26/race.csv")
@@ -356,6 +388,12 @@ race_times
 
 ### Convert start_time into a factor with levels: early_morning(0200:0600), late_morning(0600:1000), midday(1000:1400), afternoon(1400: 1800), evening(1800:2200), and night(2200:0200)
 
+Notes:
+
+'left_join' combines two datasets by matching rows based on a common key, preserving all records from the left dataset.
+
+'vars' is used in functions to specify variable names for grouping or facetting in data visualizations.
+
 ```{r}
 race_start_factor <- race_df %>%
   filter(distance == 0) %>% # Races that actually took place
@@ -433,3 +471,154 @@ The log10(value) part applies a logarithmic transformation to the variable value
 gf_histogram(~ log10(value), data = pop, title = "Histogram with Log transformed x-variable")
 gf_density(~ log10(value), data = pop, title = "Density with Log transformed x-variable")
 ```
+
+## Dataset: Faithful
+
+```{r}
+faithful
+```
+
+## Organizing the dataset
+
+```{r}
+glimpse(faithful)
+```
+
+```{r}
+inspect(faithful)
+```
+
+```{r}
+skim(faithful)
+```
+
+## Eruption Data
+
+```{r}
+gf_histogram(~eruptions, data = faithful) %>%
+  gf_labs(
+    title = "Plot 1: Eruptions",
+    caption = "ggformula"
+  )
+```
+
+This provides a basic view of the distribution of eruption times, which shows that the eruption times are bimodal—there are two peaks, indicating two common durations for eruptions: shorter and longer ones.
+
+## Eruption data with bins
+
+```{r}
+gf_histogram(~eruptions, data = faithful, bins = 150) %>%
+  gf_labs(
+    title = "Plot 2: Eruptions",
+    caption = "ggformula"
+  )
+```
+
+In this plot, the number of bins has been increased to 150. This results in a finer granularity, showing more of the detailed variations within the eruption times.
+
+## Waiting Data with bins
+
+```{r}
+gf_histogram(~waiting, data = faithful, bins = 50) %>%
+  gf_labs(
+    title = "Plot 3: Eruptions",
+    caption = "ggformula"
+  )
+```
+
+With 50 bins, it shows a unimodal distribution, with most waiting times clustering around the middle (around 70-80 minutes).
+
+## Factorization
+
+```{r}
+eruption_duration_factor <- faithful %>%
+  mutate(
+    eruption_category = case_when(
+      eruptions <= 3 ~ "short",
+      eruptions > 3 ~ "long",
+      .default = "unknown"
+    )
+  )
+```
+
+## Eruptions durations
+
+```{r}
+gf_histogram(~eruptions, fill = ~eruption_category, data = eruption_duration_factor, bins = 150) %>%
+  gf_labs(
+    title = "Plot 4: Eruption Duration Categories",
+    caption = "ggformula"
+  )%>% 
+    gf_refine(scale_fill_manual(values = c("darkgreen", "orange")))
+```
+
+The eruption durations are now divided into two categories: "short" and "long" eruptions, using a threshold of 3 minutes. The histogram shows that short eruptions are more frequent, while longer eruptions are less common but still significant.
+
+## Waiting times vary for short vs. long eruptions
+
+```{r}
+gf_histogram(~waiting, fill = ~eruption_category, data = eruption_duration_factor, bins = 100) %>%
+  gf_labs(
+    title = "Plot 5A: Waiting Times for Eruption Duration Categories",
+    caption = "ggformula"
+  )%>% 
+    gf_refine(scale_fill_manual(values = c("darkgreen", "orange")))
+```
+
+```{r}
+gf_histogram(~waiting, fill = ~eruption_category, data = eruption_duration_factor, bins = 50) %>%
+  gf_facet_wrap(~~eruption_category, scales = "free_y") %>%
+  gf_labs(
+    title = "Plot 5B: Waiting Times for Eruption Duration Categories",
+    caption = "ggformula"
+  )%>% 
+    gf_refine(scale_fill_manual(values = c("darkgreen", "orange")))
+```
+
+These histograms explore how waiting times vary depending on whether the eruption was categorized as short or long. In both plots, waiting times for long eruptions tend to be longer, with waiting times clustering higher for long eruptions. The faceted plot (5B) separates the data into distinct subplots for short and long eruptions
+
+## Number of eruptions in each category of duration
+
+```{r}
+eruption_counts <- eruption_duration_factor %>%
+  group_by(eruption_category) %>%
+  summarize(count = n())
+
+eruption_counts
+```
+
+```{r}
+eruption_duration_extra <- faithful %>%
+  mutate(
+    eruption_more = case_when(
+      eruptions > 1 & eruptions <= 2.0 ~ "very_short",
+      eruptions > 2 & eruptions <= 3.0 ~ "short",
+      eruptions > 3 & eruptions <= 4.0 ~ "medium",
+      eruptions > 4 ~ "long",
+      .default = "unknown"
+    )
+  )
+```
+
+```{r}
+gf_histogram(~waiting, fill = ~eruption_more, data = eruption_duration_extra, bins = 100) %>%
+  gf_labs(
+    title = "Plot 6A: Waiting Times for Eruption Duration Categories",
+    caption = "ggformula"
+  )%>% 
+    gf_refine(scale_fill_manual(values = c("darkgreen","brown", "orange","yellow")))
+```
+
+Eruptions are grouped into "very short," "short," "medium," and "long." The histogram displays waiting times for each category. The longer eruptions have longer waiting times. 
+
+```{r}
+gf_histogram(~waiting, fill = ~eruption_more, data = eruption_duration_extra, bins = 50, color = "black") %>%
+  gf_facet_wrap(~~eruption_more, scales = "free_y") %>%
+  gf_labs(
+    title = "Plot 6A: Waiting Times for Eruption Duration Categories",
+    caption = "ggformula"
+  )%>% 
+    gf_refine(scale_fill_manual(values = c("darkgreen","brown", "orange","yellow")))
+```
+
+This plot, divided by eruption categories of very short, short, medium, and long, shows how waiting times vary in each group. Each subplot offers detailed insights for direct comparison. Waiting times for shorter eruptions are more consistent, while longer eruptions show a wider range of waiting times.

@@ -1,0 +1,268 @@
+---
+title: "Change"
+author: "Sara S"
+---
+
+## Installing packages
+
+```{r}
+library(tidyverse) # Tidy data processing and plotting
+library(ggformula) # Formula based plots
+library(mosaic) # Our go-to package
+library(skimr) # Another Data inspection package
+library(kableExtra) # Making good tables with data
+
+library(GGally) # Corr plots
+library(corrplot) # More corrplots
+library(ggExtra) # Making Combination Plots
+
+# devtools::install_github("rpruim/Lock5withR")
+library(Lock5withR) # Datasets
+library(palmerpenguins) # A famous dataset
+
+library(easystats) # Easy Statistical Analysis and Charts
+library(correlation) # Different Types of Correlations
+# From the easystats collection of packages
+```
+
+## Dataset: HollywoodMovies2011
+
+```{r}
+HollywoodMovies2011 -> movies
+glimpse(movies)
+```
+
+## The numeric values of movie
+
+```{r}
+movies_quant <- movies %>%
+  drop_na() %>%
+  select(where(is.numeric))
+movies_quant
+```
+
+## Domestic Vs World gross earnings
+
+```{r}
+movies %>%
+  gf_point(DomesticGross ~ WorldGross) %>%
+  gf_lm() %>%
+  gf_labs(
+    title = "Scatter Plot",
+    subtitle = "Movie Gross Earnings: Domestics vs World"
+  )
+```
+
+The scatter plot shows the relationship between domestic and world gross earnings, with a linear regression line indicating how well domestic earnings predict worldwide revenue.
+
+## Movies which don't predict a profit after its first week
+
+```{r}
+movies %>%
+  gf_point(Profitability ~ OpeningWeekend) %>%
+  gf_lm() %>%
+  gf_labs(
+    title = "Scatter Plot",
+    subtitle = "Movies: Does Opening Week Earnings indicate Profitability?"
+  )
+```
+
+Analyzes whether opening weekend earnings can indicate a movie's profitability, with a fitted line suggesting any trends or lack thereof.
+
+## Movie ratings by critics on rotten tomatoes vs the audience score
+
+```{r}
+movies %>%
+  gf_point(RottenTomatoes ~ AudienceScore) %>%
+  gf_lm() %>%
+  gf_labs(
+    title = "Scatter Plot",
+    subtitle = "Movie Ratings: Tomatoes vs Audience"
+  )
+```
+
+Compares critic ratings from Rotten Tomatoes against audience scores, indicating a potential correlation or disparity in perceptions of movie quality.
+
+## Ratings by critics on rotten tomatoes vs the audience score for each movie genre
+
+```         
+```
+
+```{r}
+movies %>%
+  drop_na() %>%
+  gf_point(RottenTomatoes ~ AudienceScore,
+    color = ~Genre
+  ) %>%
+  gf_lm() %>%
+  gf_labs(
+    title = "Scatter Plot",
+    subtitle = "Movie Ratings: Trends by Genre"
+  )
+```
+
+## Relationship between rotten Tomatoes ratings, audience scores, and gross earnings
+
+```{r}
+GGally::ggpairs(
+  movies %>% drop_na(),
+  # Select Quant variables only for now
+  columns = c(
+    "RottenTomatoes", "AudienceScore", "DomesticGross", "ForeignGross"
+  ),
+  switch = "both",
+  # axis labels in more traditional locations(left and bottom)
+
+  progress = FALSE,
+  # no compute progress messages needed
+
+  # Choose the diagonal graphs (always single variable! Think!)
+  diag = list(continuous = "barDiag"),
+  # choosing histogram,not density
+
+  # Choose lower triangle graphs, two-variable graphs
+  lower = list(continuous = wrap("smooth", alpha = 0.3, se = FALSE)),
+  title = "Movies Data Correlations Plot #1"
+)
+```
+
+The plot illustrates correlations between Rotten Tomatoes ratings, audience scores, and gross earnings, revealing relationships where higher ratings often correspond to greater box office success.
+
+## The relationship between Budget and Profitability and even either of the gross earnings and Profitability
+
+Notes:
+
+-   'column = c' is for selecting specific columns from the dataset.
+
+-   'switch =' places axis labels on both sides of the plot.
+
+-   'progress =' controls whether or not to display progress messages while generating the plot.
+
+-   'diag' uses bar diagrams on the diagonal to visualize the distribution of individual variables.
+
+-   'lower = list(continuous = wrap("smooth", se = FALSE))' specifies that in the lower triangle of the correlation plot, continuous variables will be displayed using smoothed scatter plots (lines) without showing standard error bands (`se = FALSE`), giving a cleaner visualization of trends.
+
+```{r}
+GGally::ggpairs(
+  movies %>% drop_na(),
+  # Select Quant variables only for now
+  columns = c(
+    "Budget", "Profitability", "DomesticGross", "ForeignGross"
+  ),
+  switch = "both",
+  # axis labels in more traditional locations(left and bottom)
+
+  progress = FALSE,
+  # no compute progress messages needed
+
+  # Choose the diagonal graphs (always single variable! Think!)
+  diag = list(continuous = "barDiag"),
+  # choosing histogram,not density
+
+  # Choose lower triangle graphs, two-variable graphs
+  lower = list(continuous = wrap("smooth", alpha = 0.3, se = FALSE)),
+  title = "Movies Data Correlations Plot #2"
+)
+```
+
+This plot indicates that higher budgets typically lead to increased profitability and earnings.
+
+## C**orrelation test:** Profitability vs Budget
+
+Notes: Confidence interval -
+
+-   Confidence intervals (CI) estimate the uncertainty around a sample statistic.
+
+-   They provide a range where the true population parameter is likely to fall.
+
+-   The width of the interval reflects the level of uncertainty: a wider interval means more uncertainty, and a narrower interval indicates more precision.
+
+-   Confidence intervals are important because they give a sense of how reliable or precise the estimate is.
+
+-   A p-value complements confidence intervals by indicating the statistical significance of the results, helping assess the likelihood of observing the data if the null hypothesis is true.
+
+-   Null hypothesis is a statement that assumes no significant effect or relationship exists between variables.
+
+```{r}
+mosaic::cor_test(Profitability ~ Budget, data = movies) %>%
+  broom::tidy() %>%
+  knitr::kable(
+    digits = 2,
+    caption = "Movie Profitability vs Budget"
+  )
+```
+
+The correlation test measures the relationship between profitability and budget. It shows that larger budgets usually lead to higher profits.
+
+## C**orrelation test: Domestic Gross vs Budget**
+
+```{r}
+mosaic::cor_test(DomesticGross ~ Budget, data = movies) %>%
+  broom::tidy() %>%
+  knitr::kable(
+    digits = 2,
+    caption = "Movie Domestic Gross vs Budget"
+  )
+```
+
+The plot shows increased budgets generally result in higher domestic revenue.
+
+## C**orrelation test: Foreign Gross vs Budget**
+
+```{r}
+mosaic::cor_test(ForeignGross ~ Budget, data = movies) %>%
+  broom::tidy() %>%
+  knitr::kable(
+    digits = 2,
+    caption = "Movie Foreign Gross vs Budget"
+  )
+```
+
+It has a positive correlation suggesting larger budgets often lead to greater international box office success.
+
+## Dataset: mtcars
+
+```{r}
+glimpse(mtcars)
+```
+
+## Coorelations
+
+```{r}
+cor <- correlation::correlation(mtcars)
+cor
+```
+
+```{r}
+cor %>%
+  # Filter for target variable `mpg` and plot
+  filter(Parameter1 == "mpg") %>%
+  gf_point(r ~ reorder(Parameter2, r), size = 4) %>%
+  gf_errorbar(CI_low + CI_high ~ reorder(Parameter2, r),
+    width = 0.5
+  ) %>%
+  gf_hline(yintercept = 0, color = "black", linewidth = 2) %>%
+  gf_labs(
+    title = "Correlation Errorbar Chart",
+    subtitle = "Target variable: mpg",
+    x = "Predictor Variable",
+    y = "Correlation Score with mpg"
+  )
+```
+
+## Dataset: Penguins
+
+```{r}
+penguins %>%
+  drop_na() %>%
+  gf_point(body_mass_g ~ flipper_length_mm, colour = ~species) %>%
+  gf_smooth(method = "lm") %>%
+  gf_refine(scale_colour_brewer(palette = "Accent")) %>%
+  gf_labs(title = "Scatter Plot with Marginal Densities") %>%
+  ggExtra::ggMarginal(
+    type = "density", groupColour = TRUE,
+    groupFill = TRUE, margins = "both"
+  )
+```
+
+lm = linear model: enhances the interpretability of scatter plots by providing a clear visual indication of the relationship between the two variables through the fitted regression line.

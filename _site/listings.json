@@ -2,10 +2,15 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/A2- I/index.html",
+      "/posts/A2-II/index.html",
+      "/posts/A2-III/index.html",
       "/posts/day-2/index.html",
       "/posts/day-3/index.html",
       "/posts/day-4/index.html",
       "/posts/day-5/index.html",
+      "/posts/day-5/index2.html",
+      "/posts/day-6/index.html",
       "/posts/my-name-is-sara/index.html",
       "/posts/post-with-code/index.html",
       "/posts/welcome/index.html"

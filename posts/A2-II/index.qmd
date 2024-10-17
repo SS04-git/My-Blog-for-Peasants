@@ -1,0 +1,248 @@
+---
+title: "A2 - Part II"
+subtitle: "Valentine’s Day Spending"
+author: "Sara S"
+---
+
+# Dataset: **Valentine’s Day Spending**
+
+## Introduction
+
+This analysis explores how much people spend on gifts at different ages, focusing on items like Candy, Clothing, and Flowers. It aims to show trends in spending habits and preferences among age groups.
+
+## Installing Packages
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(mosaic)
+library(skimr)
+library(ggformula)
+library(ggprism)
+```
+
+## Reading the dataset
+
+```{r}
+gifts_age <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-02-13/gifts_age.csv")
+gifts_age
+```
+
+## Organizing the data
+
+```{r}
+glimpse(gifts_age)
+```
+
+```{r}
+inspect(gifts_age)
+```
+
+```{r}
+skim(gifts_age)
+```
+
+## Data Dictionary
+
+### Quantitative Variables
+
+-   **SpendingCelebrating \<dbl\>**: This variable indicates the amount spent on celebrating occasions, useful for understanding spending behavior.
+
+-   **Candy \<dbl\>**: This variable represents the amount spent on candy, relevant for analyzing preferences in confectionery spending.
+
+-   **Flowers \<dbl\>**: This variable indicates the amount spent on flowers, significant for assessing spending in the floral category.
+
+-   **Jewelry \<dbl\>**: This variable represents the amount spent on jewelry, important for understanding luxury spending habits.
+
+-   **GreetingCards \<dbl\>**: This variable indicates the amount spent on greeting cards, useful for analyzing spending in personal communications.
+
+-   **EveningOut \<dbl\>**: This variable represents the amount spent on evening outings, significant for evaluating entertainment expenses.
+
+-   **Clothing \<dbl\>**: This variable indicates the amount spent on clothing, relevant for understanding fashion and apparel spending.
+
+-   **GiftCards \<dbl\>**: This variable represents the amount spent on gift cards, important for analyzing gift-giving behaviors.
+
+### Qualitative Variables
+
+-   **Age \<chr\>**: This variable categorizes individuals into age groups (e.g., 18-24, 25-34, etc.), useful for demographic analysis.
+
+## Analyzing the qualitative data
+
+### Age
+
+```{r}
+gifts_age%>% count(Age)
+```
+
+#### Observations
+
+Each age group is evenly distributed with 1 observation each. This equal distribution provides a balanced foundation for analyzing patterns or trends across various age groups.
+
+## Analyzing the quantitative data
+
+### SpendingCelebrating
+
+```{r}
+gf_histogram(~SpendingCelebrating, data = gifts_age)
+```
+
+### Candy
+
+```{r}
+gf_histogram(~Candy, data = gifts_age)
+```
+
+### Flowers
+
+```{r}
+gf_histogram(~Flowers, data = gifts_age)
+```
+
+### Jewelry
+
+```{r}
+gf_histogram(~Jewelry, data = gifts_age)
+```
+
+### Greeting Cards
+
+```{r}
+gf_histogram(~GreetingCards, data = gifts_age)
+```
+
+### Evening Out
+
+```{r}
+gf_histogram(~EveningOut, data = gifts_age)
+```
+
+### Clothing
+
+```{r}
+gf_histogram(~Clothing, data = gifts_age)
+```
+
+### Gift Cards
+
+```{r}
+gf_histogram(~GiftCards, data = gifts_age)
+```
+
+#### Observations
+
+The histograms for the eight spending categories—SpendingCelebrating, Candy, Flowers, Jewelry, GreetingCards, EveningOut, Clothing, and GiftCards—show different patterns in how much people spend across various age groups. Most categories reveal that individuals tend to spend similar amounts, especially around mid-range values. For instance, SpendingCelebrating and GiftCards generally show lower spending, while Candy and Jewelry have more even spending across different amounts. The EveningOut category has a noticeable peak around 30, indicating that many people spend around this amount. Similarly, Clothing shows more spending between 20 and 25, while GreetingCards tends to cluster around higher amounts, particularly 42 and 43. Flowers demonstrate a consistent spending pattern without big gaps. Overall, while spending habits differ by category, there is a common trend where most people prefer to spend similar mid-range amounts, reflecting shared habits in gift-giving and leisure activities.
+
+## Transforming the data
+
+```{r}
+data <- data.frame(
+  Age = c("18-24", "25-34", "35-44", "45-54", "55-64", "65+"),
+  SpendingCelebrating = c(51, 40, 31, 19, 18, 13),
+  Candy = c(70, 62, 58, 60, 50, 42),
+  Flowers = c(50, 44, 41, 37, 32, 25),
+  Jewelry = c(33, 34, 29, 20, 13, 8),
+  GreetingCards = c(33, 33, 42, 42, 43, 44),
+  EveningOut = c(41, 37, 30, 31, 29, 24),
+  Clothing = c(33, 27, 26, 20, 19, 12),
+  GiftCards = c(23, 19, 22, 23, 20, 20)
+)
+
+# Convert to long format
+gifts <- data %>%
+  pivot_longer(
+    cols = -Age,               
+    names_to = "Gifts",        
+    values_to = "AmountsSpent" 
+  )
+gifts%>%
+  dplyr::mutate(
+    Age = as_factor(Age),      
+    Items = as_factor(Gifts)  
+  )
+```
+
+## Target Variables
+
+The target variable is what you're trying to predict or understand in an analysis. In this case, **AmountsSpent** is the focus. When examining spending on items like Candy, Clothing, and Flowers across different age groups reveals how spending habits change with age, making AmountsSpent the key outcome of interest in the analysis.
+
+## Predictor Variables
+
+Predictor variables are the independent variables that are used to explain or predict the outcome in an analysis. The predictor variables for this dataset are as follows:
+
+-   **Age**: It categorizes people by their years of life, helping to analyze how spending habits vary across different life stages.
+
+-   **Gifts**: These are categories of products or services, like Candy or Clothing. Analyzing spending on these items can help reveal consumer preferences across age groups.
+
+## Research Question
+
+How does gift spending vary across different age groups?
+
+Is there a significant difference in spending between items such as Candy, Clothing, and Flowers across age groups?
+
+## Plot
+
+```{r}
+gf_line(AmountsSpent ~ Age, data = gifts, group = ~ Gifts, color = ~ Gifts) %>%
+ gf_point() %>%
+  gf_labs(
+    title = "Valentine's Day Spending over Age",
+    x = "Age Group in Years",
+    y = "Amounts Spent per Gift",
+    caption = "Tidy Tuesday 13-Feb-2024. I was teaching O&C that day"
+  ) %>%
+  gf_refine(scale_color_manual(values = c("Candy" = "red", "Clothing" = "blue", "EveningOut" = "green", "Flowers" = "orange", "GiftCards" = "purple", "GreetingCards" = "pink", "Jewelry" = "yellow", "SpendingCelebrating" = "black"))) 
+```
+
+```{r}
+gf_line(AmountsSpent ~ Age, data = gifts, group = ~ Gifts, color = ~ Gifts) %>%
+ gf_point(shape = ~ Gifts, size = 3) %>%  # Use shape directly
+  gf_labs(
+    title = "Valentine's Day Spending over Age",
+    x = "Age Group in Years",
+    y = "Amounts Spent per Gift",
+    caption = "Tidy Tuesday 13-Feb-2024. I was teaching O&C that day"
+  ) %>%
+  gf_refine(scale_color_manual(values = c("Candy" = "red", "Clothing" = "blue", "EveningOut" = "green", 
+                              "Flowers" = "orange", "GiftCards" = "purple", 
+                              "GreetingCards" = "pink", "Jewelry" = "yellow", 
+                              "SpendingCelebrating" = "black"))) %>%
+  gf_refine(scale_shape_manual(values = c("Candy" = 16, "Clothing" = 1, "EveningOut" = 17, 
+                                          "Flowers" = 4, "GiftCards" = 18, "GreetingCards" = 25, 
+                                          "Jewelry" = 8, "SpendingCelebrating" = 3)))
+```
+
+## Plot Analysis
+
+1.  Type of Chart.
+
+    The chart is a line plot with points(shapes), where the different points represent different items like candy, clothing, etc.
+
+2.  Variables Used for Various Geometrical Aspects.
+
+    X-axis Variables: Represents the age groups such as 18-24, 25-34, 35-44, 45-54, 55-64 and 65+
+
+    Y-axis Variables: Represents the amount spent on each category
+
+    Colour: Each item is represented by a different color to distinguish spending patterns.
+
+    Shape: Different shapes for data points represent different gifts
+
+3.  What activity might have been carried out to obtain the data graphed here?
+
+    A research survey was likely conducted, asking respondents from different age groups about their spending habits on Valentine's Day gifts. Participants probably reported how much they spent on items like candy, clothing, flowers, and gift cards.
+
+4.  What pre-processing of the data was required to create the chart?
+
+    Pivoting: The dataset is reshaped from wide to long format using the pivot_longer function. This transformation consolidates the amounts spent on each gift category into a single column, AmountsSpent, while retaining Age as an identifier variable. Each row in the new dataset now corresponds to the spending on a specific gift category for a particular age group.
+
+    Factor Conversion: After pivoting, the code uses the mutate function under the dplyr package to convert the Age and Gifts columns into factors. This conversion is essential for better handling of categorical variables in visualizations, ensuring that the plotting functions recognize these variables as categorical rather than continuous.
+
+5.  Hypothesis/Research Question.
+
+    How does gift spending vary across different age groups?
+
+6.  Two-Line Story Based on the Graph.
+
+    Spending on candy and celebrations decreases steadily with age, while spending on greeting cards and gift cards remains relatively stable across age groups. The data suggests that older individuals prefer more practical gifts like gift cards, while younger people spend more on traditional gifts like candy and flowers. This reveals that younger age groups tend to spend more on gifts for Valentine's Day, particularly on candy and flowers, indicating that romantic gestures are more prominent among younger individuals and highlighting differing approaches to celebration across age brackets.
+
+inference

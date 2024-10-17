@@ -1,0 +1,427 @@
+---
+title: "A2- Part III"
+subtitle: "School Scores"
+author: "Sara S"
+---
+
+# Dataset: **School Scores**
+
+## Introduction
+
+This dataset includes students' scores in subjects like Arts, English, Mathematics, and Science, along with details about their family income and gender. It helps to understand how these factors affect students academic performance.
+
+## Installing Packages
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(mosaic)
+library(skimr)
+library(ggformula)
+library(GGally)
+library(janitor)
+```
+
+## Importing the dataset
+
+```{r}
+school <- read_csv("../../data/school.csv")
+school
+```
+
+## Organizing the dataset
+
+```{r}
+glimpse(school)
+```
+
+```{r}
+inspect(school)
+```
+
+```{r}
+skim(school)
+```
+
+## Cleaning the dataset
+
+```{r}
+cleaned <- school %>%
+  clean_names(case = "big_camel")
+cleaned
+```
+
+```{r}
+glimpse(cleaned)
+```
+
+```{r}
+inspect(cleaned)
+```
+
+```{r}
+skim(cleaned)
+```
+
+## Data Dictionary
+
+### Quantitative Variables
+
+-   **TotalMath \<dbl\>**: This variable represents the total math scores of students, important for assessing overall math proficiency.
+
+-   **TotalVerbal \<dbl\>**: This variable represents the total verbal scores of students, essential for evaluating verbal skills.
+
+-   **TotalTestTakers \<dbl\>**: This variable indicates the number of test takers, helping analyze participation levels in testing.
+
+-   **AcademicSubjectsMathematicsAverageGpa \<dbl\>**: This variable represents the average GPA for mathematics, critical for understanding math education outcomes.
+
+-   **AcademicSubjectsEnglishAverageGpa \<dbl\>**: This variable represents the average GPA for English, important for evaluating language proficiency.
+
+-   **AcademicSubjectsNaturalSciencesAverageGpa \<dbl\>**: This variable represents the average GPA for natural sciences, relevant for assessing performance in scientific subjects.
+
+-   **AcademicSubjectsArtsMusicAverageGpa \<dbl\>**: This variable represents the average GPA for arts and music subjects, useful for assessing performance in creative fields.
+
+-   **AcademicSubjectsForeignLanguagesAverageGpa \<dbl\>**: This variable represents the average GPA of students in foreign language subjects, providing insights into students' academic performance in language studies.
+
+-   **AcademicSubjectsSocialSciencesHistoryAverageGpa \<dbl\>**: This variable indicates the average GPA of students in social sciences and history subjects.
+
+-   **FamilyIncomeLessThan20KMath \<dbl\>**: This variable shows math scores for students from families with income below \$20,000, useful for socioeconomic analysis.
+
+-   **FamilyIncomeBetween20_40KMath \<dbl\>**: This variable indicates math scores for students from families with income between \$20,000 and \$40,000, helping assess income impact.
+
+-   **FamilyIncomeBetween40_60KMath \<dbl\>**: This variable shows math scores for families with income between \$40,000 and \$60,000, useful for understanding income effects.
+
+-   **FamilyIncomeBetween60_80KMath \<dbl\>**: This variable shows math scores for families with income between \$60,000 and \$80,000, providing insight into middle-income outcomes.
+
+-   **FamilyIncomeBetween80_100KMath \<dbl\>**: This variable indicates math scores for families with income between \$80,000 and \$100,000, useful for understanding upper middle-income outcomes.
+
+-   **FamilyIncomeMoreThan100KMath \<dbl\>**: This variable represents math scores for students from families with income above \$100,000, useful for high-income comparisons.
+
+-   **GpaAPlusMath \<dbl\>**: This variable represents math scores for students with an A-plus GPA, important for high-achieving students’ performance.
+
+-   **GpaAMath \<dbl\>**: This variable indicates math scores for students with an A GPA, critical for understanding top performance trends.
+
+-   **GpaBMath \<dbl\>**: This variable shows math scores for students with a B GPA, useful for understanding the performance of average-achieving students in math.
+
+-   **GenderFemaleMath \<dbl\>**: This variable represents math scores for female students, important for analyzing gender-based performance in mathematics.
+
+-   **GenderMaleMath \<dbl\>**: This variable indicates math scores for male students, helping in the comparison of gender differences in mathematical achievement.
+
+-   **GenderFemaleVerbal \<dbl\>**: This variable indicates verbal scores for female students, important for gender-based performance analysis.
+
+-   **GenderMaleVerbal \<dbl\>**: This variable shows verbal scores for male students, helping in comparing gender differences in verbal achievement.
+
+-   **GpaAPlusVerbal \<dbl\>**: This variable represents verbal scores for students with an A-plus GPA, important for high-achieving students’ performance.
+
+-   **GpaAVerbal \<dbl\>**: This variable indicates verbal scores for students with an A GPA, critical for understanding top performance trends.
+
+-   **GpaBVerbal \<dbl\>**: This variable shows verbal scores for students with a B GPA, useful for analyzing average performing students.
+
+-   **GpaDOrLowerMath \<dbl\>**: This variable shows math scores for students with a D or lower GPA, critical for intervention strategies.
+
+-   **GpaDOrLowerVerbal \<dbl\>**: This variable indicates verbal scores for students with a D or lower GPA, important for intervention strategies.
+
+-   **ScoreRangesBetween300To400VerbalTotal \<dbl\>**: This variable represents the total number of students scoring between 300 and 400 in verbal, providing insights into the performance of students in this score range.
+
+-   **ScoreRangesBetween400To500VerbalTotal \<dbl\>**: This variable indicates the total number of students scoring between 400 and 500 in verbal, helping to highlight the achievements of middle-range performers.
+
+-   **ScoreRangesBetween300To400MathTotal \<dbl\>**: This variable represents the total number of students scoring between 300 and 400 in math, offering a view into the performance of students in this category.
+
+-   **ScoreRangesBetween400To500MathTotal \<dbl\>**: This variable indicates the total number of students scoring between 400 and 500 in math, contributing to an understanding of the accomplishments of students in the upper-middle range of scores.
+
+### Qualitative Variables
+
+-   **StateCode \<chr\>**: This variable contains abbreviations of state names such as "AL" for Alabama and "AK" for Alaska.
+
+-   **StateName \<chr\>**: This variable contains the full names of states like "Alabama" and "Alaska".
+
+-   **Year \<chr\>**: Although it is usually considered as a numerical value, the Year variable is treated as categorical since it represents distinct time points rather than continuous data.
+
+## Factorizing
+
+```{r}
+school_modified <- cleaned %>%
+  dplyr::mutate(
+    StateCode = as.factor(StateCode),
+    StateName = as.factor(StateName),
+    Year = as.factor(Year)
+  )
+glimpse(school_modified)
+```
+
+```{r}
+inspect(school_modified)
+```
+
+```{r}
+skim(school_modified)
+```
+
+## Target Variables
+
+-   **TotalMath**: If you want to predict math performance scores, this could be the target variable.
+
+-   **TotalVerbal**: If you aim to predict verbal performance scores, this could be the target.
+
+## Predictor Variables
+
+-   **StateName:** This indicates the specific state where students are located, allowing analysis of how different regions influence test performance.
+
+-   **StateCode:** This shows the state where students are from, helping to see how location affects test scores.
+
+-   **TotalTestTakers:** This counts how many students took the test, giving insight into the testing situation.
+
+-   **GenderFemaleMath / GenderMaleMath / GenderFemaleVerbal / GenderMaleVerbal:** These show how well boys and girls did in math and verbal sections, highlighting gender differences in performance.
+
+-   **Family_income:** This indicates the income level of students' families, helping to see how money affects test scores.
+
+-   **Score Ranges:** This groups students by their test scores, helping to understand how many students perform at different levels.
+
+-   **Academic Subjects Average GPA:** This shows students' overall grades, which can predict how well they do on tests.
+
+## Analyzing the qualitative data
+
+### StateName
+
+```{r}
+school_modified%>% count(StateName)
+```
+
+#### Observations
+
+It takes a count of test takers from various states. Most states, including New Hampshire, New Jersey, and New York, have 11 observations each. However, Puerto Rico, Virgin Islands and West Virginia have only 9 observations. This uniformity in the number of observations suggests that data collection was relatively consistent across most states, allowing for reliable comparisons.
+
+### StateCode
+
+```{r}
+school_modified%>% count(StateCode)
+```
+
+#### Observations
+
+This analysis does the same as the previous one but focuses on the state codes instead of state names. This allows for a more standardized comparison, as state codes are often used in datasets to represent geographical regions.
+
+### Year
+
+```{r}
+school_modified%>% count(Year)
+```
+
+#### Observations
+
+The dataset covers years from 2005 to 2014, with varying numbers of observations: 53 observations for 2007, 2008, 2011, 2012, 2013, 2014 and 2015 52 observations for the years 2005, 2006 51 observations for 2009 and 2010 These changes in the number of observations each year might indicate differences in data collection methods or participation rates, with the highest number of observations occurring after 2010.
+
+## Analyzing the quantitative data
+
+```{r}
+school_modified
+```
+
+### FamilyIncomeLessThan20KMath
+
+```{r}
+gf_histogram(~FamilyIncomeLessThan20KMath, data = school_modified)
+```
+
+#### Observations
+
+The histogram for students from families earning less than \$20,000 shows that most math scores are higher, especially around 400 and above. This indicates that many students are doing well in math, indicating a supportive educational environment. The few students scoring much lower create a small left tail, making the distribution left skewed.
+
+### FamilyIncomeBetween20_40KMath
+
+```{r}
+gf_histogram(~FamilyIncomeBetween20_40KMath , data = school_modified)
+```
+
+#### Observations
+
+It shows that most math scores are grouped around the higher range, especially near 400. This means many students in this income group do well in math. Similar to the previous group, there are only a few students with much lower scores, creating a left skew in the data. While some students scored lower, a significant number are achieving high math scores despite having moderate family incomes.
+
+### FamilyIncomeBetween40_60KMath
+
+```{r}
+gf_histogram(~FamilyIncomeBetween40_60KMath , data = school_modified)
+```
+
+#### Observations
+
+shows that most math scores are concentrated around 500. This indicates that many students in this income group perform well in math. Unlike the previous income groups, there is a more balanced distribution of scores, with fewer students scoring very low and a significant number scoring higher. This results in a slight right skew, meaning the tail on the right side of the distribution is longer than the left. This suggests that while many students excel, there are still some lower scores present.
+
+### FamilyIncomeBetween60_80KMath
+
+```{r}
+gf_histogram(~FamilyIncomeBetween60_80KMath , data = school_modified)
+```
+
+#### Observations
+
+The majority of students math scores fall within the range of 450 to 550, with a peak around 500, indicating that most students in this income group perform at a similar level. There are fewer students scoring in the lower ranges, below 400. The histogram also appears to be left-skewed, as the tail on the left side is longer, showing that a small number of students have much lower scores while the majority have higher scores.
+
+### FamilyIncomeBetween80_100KMath
+
+```{r}
+gf_histogram(~FamilyIncomeBetween80_100KMath , data = school_modified)
+```
+
+#### Observations
+
+The distribution of math scores is centered around 500. The highest count is around this central value, with the number of observations gradually decreasing on both sides. There are a few scores below 450 and above 600, indicating a relatively balanced distribution. However, the shape is slightly right-skewed, as the tail extends more to the right after the central peak, suggesting that a small number of students scored higher than most others.
+
+### FamilyIncomeMoreThan100KMath
+
+```{r}
+gf_histogram(~FamilyIncomeMoreThan100KMath , data = school_modified)
+```
+
+#### Observations
+
+The distribution of math scores is also centered around 600, but this distribution is more concentrated with fewer observations spread across the range. The highest count occurs around the 600 mark, with the number of scores sharply dropping off before 500. This distribution is left-skewed, meaning that most students score on the higher end, while only a small number of students have lower scores, with very few scoring below 400. The data is more concentrated at the higher scores, with a long tail extending towards the lower scores.
+
+## Research Questions
+
+1.  How does family income level affect the average test scores of students in different states?
+
+2.  Is there a significant difference in test performance between male and female students across various academic subjects?
+
+3.  What is the relationship between the number of total test takers and the average GPA in different states?
+
+## Plot: **All Subjects**
+
+```{r}
+subjects <- school_modified %>% 
+  rename(
+    ArtsMusic = AcademicSubjectsArtsMusicAverageGpa,
+    English = AcademicSubjectsEnglishAverageGpa ,
+    ForeignLanguages = AcademicSubjectsForeignLanguagesAverageGpa ,
+    Mathematics = AcademicSubjectsMathematicsAverageGpa,
+    NaturalSciences = AcademicSubjectsNaturalSciencesAverageGpa ,
+    SocialSciencesHistory = AcademicSubjectsSocialSciencesHistoryAverageGpa
+  ) %>%
+  select(ArtsMusic,English,ForeignLanguages,Mathematics,NaturalSciences,SocialSciencesHistory)
+subjects
+```
+
+```{r}
+GGally::ggpairs(
+  subjects %>% drop_na(),
+  # Select the variables to include in the plot
+  columns = c("ArtsMusic", "English", "ForeignLanguages", "Mathematics", "NaturalSciences", "SocialSciencesHistory"),
+  switch = "both",
+  progress = FALSE,
+  diag = list(continuous = "densityDiag"),
+  lower = list(continuous = wrap("smooth", alpha = 0.3, se = FALSE)),
+  title = "Academic Scores Correlation Plot"
+)
+```
+
+## Plot Analysis
+
+1.  Type of Charts.
+
+    The chart has three different types of visuals. First, the scatter plot shows how students scores in different subjects relate to each other, making it easy to see how well a score in one subject goes along with a score in another. Second, the density plot gives a smooth view of how scores are spread out, showing where most students scores are concentrated. Lastly, the correlation matrix shows numbers that indicate how strongly the scores in different subjects are connected, helping to understand how students perform across subjects.
+
+2.  Variables Used for Various Geometrical Aspects
+
+    X-axis and Y-axis Variables:
+
+    ArtsMusic
+
+    English
+
+    ForeignLanguages
+
+    Mathematics
+
+    NaturalSciences
+
+    SocialSciencesHistory
+
+    Each subject listed in the columns will have its scores plotted along both axes during the pairwise comparisons.
+
+3.  What activity might have been carried out to obtain the data graphed here?
+
+    To gather the data shown in the Academic Scores in Different Subjects chart, students likely took part in a structured assessment in their schools. This could have included tests given to students in different grades or classes. They probably completed standardized tests in subjects like Mathematics, Natural Sciences, Social Sciences, English, Foreign Languages, and Arts Music.
+
+4.  Hypothesis/Research Question
+
+    What is the relationship between the students scores in different subjects and how does what is the overall distribution of these scores?
+
+5.  Two-Line Story Based on the Graph
+
+    It’s surprising to observe a strong positive correlation between Math and Science scores, as well as between English and Science and English and Social Science scores. This suggests that students who excel in one subject often do well in others. A key takeaway is that while many students achieve above-average scores, a significant number still face challenges, indicating a need for support to help those struggling improve their academic performance.
+
+## Plot: **Maths vs Family Income**
+
+```{r}
+name_data <- school_modified %>%
+  select(
+    FamilyIncomeBetween20_40KMath,
+    FamilyIncomeLessThan20KMath,
+    FamilyIncomeBetween40_60KMath,
+    FamilyIncomeBetween60_80KMath,
+    FamilyIncomeBetween80_100KMath,
+    FamilyIncomeMoreThan100KMath
+  ) %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = "names",
+    values_to = "values"
+  ) %>%
+  mutate(names = case_when(
+    names == "FamilyIncomeLessThan20KMath" ~ "LessThan20K",
+    names == "FamilyIncomeBetween20_40KMath" ~ "Between20_40K",
+    names == "FamilyIncomeBetween40_60KMath" ~ "Between40_60K",
+    names == "FamilyIncomeBetween60_80KMath" ~ "Between60_80K",
+    names == "FamilyIncomeBetween80_100KMath" ~ "Between80_100K",
+    names == "FamilyIncomeMoreThan100KMath" ~ "MoreThan100K"
+  )) 
+```
+
+```{r}
+name_data <- name_data %>%
+  select(names, values) %>%
+  dplyr::mutate(
+    names = factor(names,
+      levels = c("LessThan20K", "Between20_40K", "Between40_60K","Between60_80K", "Between80_100K", "MoreThan100K"),
+      labels = c("LessThan20K", "Between20_40K", "Between40_60K","Between60_80K", "Between80_100K", "MoreThan100K"),
+      ordered = TRUE
+    )
+  )
+name_data
+```
+
+```{r}
+name_data %>%
+  gf_boxplot(reorder(names, values, FUN = median) ~ values,
+             fill = ~names,
+             alpha = 0.2) %>%
+  gf_labs(title = "Maths vs Family Income",
+          x = "Scores In Maths",
+          y = "Income Class")
+```
+
+1.  Type of Charts.
+
+    Box Plot: It compares math scores across different income groups, showing the differences in average scores (median) and the range of scores (spread) for each group. This chart helps us see how math scores change with income levels and whether higher incomes are linked to higher and more consistent scores.
+
+2.  Variables Used for Various Geometrical Aspects
+
+    X-axis Variables: Represents the math scores for students named as values.
+
+    Y-axis Variables: The variable names represents the different family income categories. These categories include LessThan20K, Between20_40K, Between40_60K, Between60_80K, Between80_100K, and MoreThan100K. These were created by mutating the original columns from FamilyIncomeLessThan20KMath, FamilyIncomeBetween20_40KMath, FamilyIncomeBetween40_60KMath, FamilyIncomeBetween60_80KMath, FamilyIncomeBetween80_100KMath and FamilyIncomeMoreThan100KMath.
+
+    Fill: The names variables is used for color-coded representation of each income group, such as LessThan20K, Between20_40K, Between40_60K, Between60_80K, Between80_100K, and MoreThan100K.
+
+3.  What activity might have been carried out to obtain the data graphed here?
+
+To obtain the data graphed here, a survey or study likely collected information on students' family incomes after their tests on various subjects, focusing solely on math performance to analyze the relationship between income levels and academic achievement.
+
+4.  Hypothesis/Research Question
+
+    Is there a relationship between family income and students' performance in mathematics?
+
+5.  Two-Line Story Based on the Graph
+
+    The box plot reveals that lower-income students have a wider range in their performance levels for maths scores. Surprisingly, students from higher income families consistently achieve better median scores, suggesting that financial resources play a significant role in academic success despite the larger population in lower income brackets.
+
+inferences

@@ -1,0 +1,297 @@
+---
+title: "A2-Part I"
+subtitle: "Movie Profits"
+author: "Sara S"
+---
+
+# Dataset: Movie Profits
+
+## Introduction
+
+In this analysis, we explore the profitability of movies based on a dataset containing information about production budgets, gross earnings, and various qualitative aspects of films. The primary objective is to assess which genres yield the highest profit and to analyze how different factors such as release dates, distributors, and ratings contribute to movie success.
+
+## Installing Packages
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(mosaic)
+library(skimr)
+library(ggformula)
+```
+
+## Importing the dataset
+
+```{r}
+movies <- read_delim("../../data/movie_profit.csv", delim = ";")
+movies
+```
+
+## Organizing the data
+
+```{r}
+glimpse(movies)
+```
+
+```{r}
+inspect(movies)
+```
+
+```{r}
+skim(movies)
+```
+
+## Data Dictionary
+
+### Quantitative Variables:
+
+-   **production_budget** (\<dbl\>): The cost of producing the movie.
+
+-   **domestic_gross** (\<dbl\>): Revenue earned from domestic markets.
+
+-   **worldwide_gross** (\<dbl\>): Total revenue earned from all markets.
+
+-   **profit_ratio** (\<dbl\>): The ratio of profit, calculated based on budget and gross earnings.
+
+### Qualitative Variables:
+
+-   **release_date** (\<date\>): The date the movie was released.
+
+-   **decade** (\<dbl\>): The decade in which the movie was released, derived from the date of release.
+
+-   **movie** (\<chr\>): The name of the movie.
+
+-   **distributor** (\<chr\>): The company that distributed the movie.
+
+-   **mpaa_rating** (\<chr\>): The movie's rating like PG-18, PG-13.
+
+-   **genre** (\<chr\>): The genre of the movie such as drama, comedy and action.
+
+## Factorization
+
+```{r}
+movies_modified <- movies %>%
+  dplyr::mutate(
+    decade = as_factor(decade),
+    genre = as_factor(genre),
+    mpaa_rating = as_factor(mpaa_rating),
+    distributor = as_factor(distributor)
+  )
+glimpse(movies_modified)
+```
+
+```         
+```
+
+```{r}
+inspect(movies_modified)
+```
+
+```{r}
+skim(movies_modified)
+```
+
+## Target Variable
+
+The target variable, also known as the dependent variable, is the main outcome that can be used to predict or explain the analysis. It is the primary focus of a dataset. The target variable for the movie profit dataset. The ratio of profit is calculated based on budget and gross earnings. This variable indicates how profitable the movie was, which is often the key metric for movie success.
+
+## Predictor Variable
+
+Predictor variables, or independent variables, are the features or inputs used to make predictions about the target variable. These variables influence or relate to the target variable. The predictor variables for the movie profit dataset are as follows:
+
+-   **production_budget**
+
+-   **domestic_gross**
+
+-   **worldwide_gross**
+
+-   **release_date**
+
+-   **decade**
+
+-   **mpaa_rating**
+
+-   **distributor**
+
+-   **genre**
+
+## Analyse the qualitative data
+
+### Date of release
+
+```{r}
+movies_modified %>% count(release_date)
+```
+
+```{r}
+movies_modified %>% 
+  count(release_date) %>%
+  arrange(desc(n))
+```
+
+#### Observations:
+
+This analysis counts the number of movies released on specific dates. Typically, most movies have unique release dates, so we can expect that the counts for individual release_dates values are 1 or at most below three during the late 20th century, with only a few films sharing the same date. However, it became increasingly common for multiple films to be released on the same date since the 2000s, with up to 8 movies being released in December of 2000. The results can help identify peak movie release periods used by the film industry.
+
+### Decade
+
+```{r}
+movies_modified %>% count(decade)
+```
+
+#### Observations:
+
+By counting the number of movies released in each decade, we can identify which decades had the highest number of releases according to the dataset. This trend indicates growth in the industry and its production capabilities, evident during the 1990s, 2000s, and 2010s, which highlight improved production resources and greater accessibility to films.
+
+### Movie
+
+```{r}
+movies_modified %>% count(movie)
+```
+
+#### Observations:
+
+This analysis counts the occurrences of each movie in the dataset. Most films should appear only once, resulting in counts of one for each entry.
+
+### Distributor
+
+```{r}
+movies_modified %>% count(distributor)
+```
+
+#### Observations:
+
+This analysis is done to understand the number of movies managed by each company. The table reveals that the category Other dominates the dataset with 1,737 films, indicating a significant presence of smaller or independent distributors. Among major studios, Warner Bros. leads with 360 films, followed by Sony Pictures at 332, Universal at 299, 20th Century Fox at 279 and finally Paramount Pictures at 261 films, highlighting their relevance in the industry. Overall, the dataset features a mix of both major and minor distributors, with a higher number for the Other category (200 more than the films of major studies combined), suggesting a diverse range of films, including independent productions and those distributed outside traditional channels.
+
+### Rating
+
+```{r}
+movies_modified %>% count(mpaa_rating)
+```
+
+#### Observations:
+
+The analysis of MPAA ratings shows how movies are classified based on their intended audience. The dataset indicates that there are many R-rated films, with a total of 1,477, and a close number of PG-13 films at 1,066. On the other hand, there are 552 PG-rated films, and G-rated films are the least common, with only 85 entries. This indicates that the majority of films are targeted toward mature audiences, reflecting trends in content production that cater to more adult themes, while very few films are suitable for all ages without parental guidance.
+
+### Genre
+
+```{r}
+movies_modified %>% count(genre)
+```
+
+#### Observations:
+
+The distribution of films across various categories reveals that the drama genre emerges as the most popular one, with 1,209 entries, followed by Comedy at 798. Action and Adventure films also contribute significantly, about 547 and 467 entries respectively, indicating their popularity and frequent production. Surprisingly, horror is the least represented genre, with only about 289 films, despite its popularity, especially around Halloween in October
+
+## Analayse the quantitative data
+
+### Production budget
+
+```{r}
+movies_modified %>%
+  gf_histogram(~production_budget)
+```
+
+#### Observations:
+
+The histogram of production budgets reveals a right-skewed distribution, indicating that most films have lower budgets. A significant number of movies fall within the lower budget range, while high-budget films are less common. This implies that filmmakers often work with limited financial resources.
+
+### Domestic gross
+
+```{r}
+movies_modified %>%
+  gf_histogram(~domestic_gross)
+```
+
+#### Observations:
+
+The histogram of domestic gross revenue shows a right-skewed distribution, indicating that most films generate low to moderate earnings. A significant number of movies earn little to no domestic gross, while only a few achieve high earnings.
+
+### Worldwide gross
+
+```{r}
+movies_modified %>%
+  gf_histogram(~worldwide_gross)
+```
+
+#### Observations:
+
+The histogram of worldwide gross revenue displays a right-skewed distribution, similar to the other analysis. Most films earn relatively low revenue, with a significant number reporting little to no earnings. A small number of movies, however, achieve substantial worldwide gross, indicating the competitive landscape of the global film industry.
+
+### Profit ratio
+
+```{r}
+movies_modified %>%
+  gf_histogram(~profit_ratio)
+```
+
+#### Observations:
+
+Most data points are clustered near zero, with a sharp drop-off after the initial bar. The skewed nature of the graph suggests that the majority of movies have very low profit ratios, while only a few exhibit extreme values, indicating a highly unequal distribution of profits.
+
+## Research Questions
+
+1.  How do production budget and genre together influence the profit ratio of a movie?
+
+2.  How do different film distributors compare in profit ratios across various genres?
+
+3.  How do domestic gross and distributor type affect the overall worldwide gross of a movie?
+
+## Plot
+
+```{r}
+ggplot(movies_modified, aes(x = genre, y = profit_ratio)) +
+  facet_wrap(vars(distributor))+
+  stat_summary(fun = "median", geom = "bar") +
+  labs(title = "Profits made by film distributors", subtitle = "Ratio of profits to budgets", x = "Genre", y = "Median Profit Ratio")+  
+  coord_flip()
+```
+
+```{r}
+median_profit_ratios <- movies_modified %>%
+  group_by(genre) %>%
+  summarize(median_profit_ratio = median(profit_ratio, na.rm = TRUE))
+
+median_profit_ratios
+```
+
+## Plot Analysis
+
+1.  Type of plot.
+
+    The plot is a bar chart (using ggplot), specifically a dodge bar chart that displays the median profit ratio for different movie genres, separated by film distributor.
+
+2.  What are the variables used to plot this graph?
+
+    X-axis: Genre - the genre of the movie.
+
+    Y-axis: Median Profit Ratio - the median of the ratio of profits to budgets.
+
+    Faceting Variable: Distributor - the film distributor. Its used to create separate panels for each distributor.
+
+3.  If you were to invest in movie production ventures, which are the two best genres that you might decide to invest in?
+
+    ```{r}
+    ggplot(movies_modified, aes(x = genre, y = profit_ratio)) +
+      stat_summary(fun = "median", geom = "bar") +
+      labs(title = "Profits made by film distributors", subtitle = "Ratio of profits to budgets", x = "Genre", y = "Median Profit Ratio")+  
+      coord_flip()
+    ```
+
+    If one were to invest in movie production ventures, the two best genres to consider would be Horror and Adventure. Based on the graph, Horror films show a notably high median profit ratio across various distributors, indicating their ability to generate substantial profits relative to their budgets. This genre has a dedicated fan base, and films often attract audiences, especially during peak seasons like Halloween. Investing in Horror films could bring in significant returns, given their financial success and proven ability to draw in crowds.
+
+    Adventure films also stand out in terms of profitability. The data suggests that they outperform genres like Drama, Action, and Comedy when considering the median profit ratios. This strong performance highlights a promising return on investment for films in this genre. Adventure films often feature engaging storytelling and visual effects, which can capture audiences and drive unimagnable box office success.
+
+    Interestingly, both Horror and Adventure genres have fewer films on the list compared to Drama, Action, and Comedy. Despite having less productions across all distributors, their higher profitability suggests a potential gap in the market. With fewer films, there is less competition, creating opportunities for small-budget productions. By focusing on these genres, investors can capitalize on their profitability while meeting audience demand for quality Horror and Adventur
+
+4.  Which R command might have been used to obtain the separate plots for each distributor?
+
+    The R command used to create separate plots for each distributor in the graph is:
+
+    facet_wrap(vars(distributor))
+
+    This command allows for the creation of multiple subplots (facets) in one plot, where each subplot corresponds to a different distributor, allowing for easier comparison across them.
+
+5.  If the original dataset had BUDGETS and PROFITS in separate columns, what preprocessing might have been done to achieve this plot?
+
+## Insights

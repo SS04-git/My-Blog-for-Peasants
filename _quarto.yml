@@ -12,6 +12,8 @@ website:
         href: https://twitter.com
 format:
   html:
+    df_print: paged
+    font: consolas
     theme: lux
     css: styles.css
 
