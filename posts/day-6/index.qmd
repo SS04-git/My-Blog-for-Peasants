@@ -16,3 +16,5 @@ library(infer)
 n, pop mean, pop_sd, standard error
 
 ronald fisher
+
+twisted means

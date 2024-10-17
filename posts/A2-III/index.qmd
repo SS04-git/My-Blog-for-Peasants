@@ -304,7 +304,6 @@ subjects
 ```{r}
 GGally::ggpairs(
   subjects %>% drop_na(),
-  # Select the variables to include in the plot
   columns = c("ArtsMusic", "English", "ForeignLanguages", "Mathematics", "NaturalSciences", "SocialSciencesHistory"),
   switch = "both",
   progress = FALSE,
@@ -355,11 +354,11 @@ GGally::ggpairs(
 ```{r}
 name_data <- school_modified %>%
   select(
-    FamilyIncomeBetween20_40KMath,
-    FamilyIncomeLessThan20KMath,
     FamilyIncomeBetween40_60KMath,
     FamilyIncomeBetween60_80KMath,
     FamilyIncomeBetween80_100KMath,
+    FamilyIncomeLessThan20KMath,
+    FamilyIncomeBetween20_40KMath,
     FamilyIncomeMoreThan100KMath
   ) %>%
   pivot_longer(
@@ -392,13 +391,26 @@ name_data
 
 ```{r}
 name_data %>%
-  gf_boxplot(reorder(names, values, FUN = median) ~ values,
-             fill = ~names,
-             alpha = 0.2) %>%
+  gf_boxplot(reorder(names, values, FUN = median) ~ values) %>%
   gf_labs(title = "Maths vs Family Income",
           x = "Scores In Maths",
           y = "Income Class")
 ```
+
+### Plot with specified colours
+
+```{r}
+name_data %>%
+  gf_boxplot(reorder(names, values, FUN = median) ~ values,
+             fill = ~names,
+             alpha = 0.8) %>%
+  gf_labs(title = "Maths Scores vs Family Income",
+          x = "Scores In Maths",
+          y = "Income Class") %>%
+  gf_refine(scale_fill_manual(values = c("gray80", "gray65", "gray50", "gray40", "gray25", "gray10")))
+```
+
+At first, I struggled to replicate the exact colors from the website. However, adjusting the opacity with alpha improved the color matching. This adjustment helped me get as close as possible to the necessary colors.
 
 1.  Type of Charts.
 
@@ -414,7 +426,7 @@ name_data %>%
 
 3.  What activity might have been carried out to obtain the data graphed here?
 
-To obtain the data graphed here, a survey or study likely collected information on students' family incomes after their tests on various subjects, focusing solely on math performance to analyze the relationship between income levels and academic achievement.
+    To obtain the data graphed here, a survey or study likely collected information on students' family incomes after their tests on various subjects, focusing solely on math performance to analyze the relationship between income levels and academic achievement.
 
 4.  Hypothesis/Research Question
 
@@ -424,4 +436,16 @@ To obtain the data graphed here, a survey or study likely collected information 
 
     The box plot reveals that lower-income students have a wider range in their performance levels for maths scores. Surprisingly, students from higher income families consistently achieve better median scores, suggesting that financial resources play a significant role in academic success despite the larger population in lower income brackets.
 
-inferences
+## Inferences and My Journey
+
+Throughout my analysis of the school scores dataset, I gained valuable insights into how different factors, such as family income and gender, can influence students' academic performance. By exploring the data, I discovered that students from various income levels show different patterns in their scores across subjects like Mathematics, English, and Science. For example, students from families earning less than \$20,000 often displayed a wider range of performance levels, with some achieving high scores while others struggled. In contrast, those from families earning more than \$100,000 consistently scored higher, suggesting that financial stability might provide access to better educational resources. This understanding highlights the importance of considering socioeconomic backgrounds when evaluating educational outcomes and devising strategies for improving academic performance.
+
+I practiced using functions like mutate, pivot_longer, and clean_names, which helped me reshape and standardize the data for better analysis. The mutate function allowed me to create new variables that made it easier to interpret the data, while pivot_longer helped transform the dataset into a longer format, making it suitable for visualization. Creating visualizations, such as scatter plots and box plots, allowed me to see how scores were distributed among students from different family income levels. The histogram for the "FamilyIncomeLessThan20KMath" variable, for example, revealed that most students scored above 400, indicating that, despite their low income, many were performing well. These graphs not only made the data more engaging but also revealed patterns I might have missed when looking at just the table.
+
+The correlation plots were particularly interesting. Using GGally::ggpairs, I was able to visualize the relationships between different subjects, revealing that students who excel in Mathematics also tended to perform well in Science and English. This positive correlation shows that if students do well in one subject, they're likely to do well in others too. This highlights the importance of teaching methods that connect different subjects and support overall student growth.
+
+I noticed that my first research questions I had are slightly connected to the box plot created. The question looks at how family income affects average test scores in different states, which has some similarities to the boxplot showing the connection between math scores and income. This shows how socio-economic status can influence academic success. The second question explores whether there are performance differences between male and female students across various subjects, which again has its similarities and differences with Chart 1 about academic scores.
+
+Additionally, the box plot comparing math scores with family income provided a clear visual representation of how income levels affect academic performance. The plot showed that students from higher-income families had higher median scores, while those from lower-income backgrounds displayed a wider range of scores, indicating significant differences in academic achievement. This shows how financial resources can impact educational success, suggesting that more support and resources may be needed for lower-income students to ensure them with possibly similar achievements.
+
+Finally, I couldn't reproduce the exact version of the boxplot graph shown on the website. In my graph, the "LessThan20K" category appears at the bottom, but on the website, it's the second category. Additionally, the tables listing the names and values don’t match those on the website either.

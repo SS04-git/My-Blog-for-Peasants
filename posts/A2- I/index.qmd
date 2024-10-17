@@ -232,19 +232,49 @@ Most data points are clustered near zero, with a sharp drop-off after the initia
 ## Research Questions
 
 1.  How do production budget and genre together influence the profit ratio of a movie?
-
-2.  How do different film distributors compare in profit ratios across various genres?
-
-3.  How do domestic gross and distributor type affect the overall worldwide gross of a movie?
+2.  How do domestic gross and distributor type affect the overall worldwide gross of a movie?
 
 ## Plot
 
+Notes:
+
+-   **stat_summary**: This function in ggplot2 allows you to summarize data in various ways before plotting.
+
+-   **geom = "bar"**: This specifies that the summarized data will be shown as bars. A bar is created for each genre, showing the median profit ratio for that genre within each distributor facet. Since you are using stat_summary, the height of the bar represents the calculated median value of profit_ratio.
+
+### Using ggformula
+
 ```{r}
-ggplot(movies_modified, aes(x = genre, y = profit_ratio)) +
-  facet_wrap(vars(distributor))+
+##gf_barh( ~ genre | distributor, data = movies_modified) %>% 
+      ##gf_lab(y = "Genre", x = "Median Profit Ratio",
+       ##title = "Profits made by film distributors")
+```
+
+### Using ggformula (bar instead of barh)
+
+```{r}
+##gf_bar( ~ genre | distributor, data = movies_modified, 
+         ##ylab = "Genre", xlab = "Median Profit Ratio", 
+         ##title = "Profits made by film distributors")
+```
+
+```{r}
+##ggplot(movies_modified, aes(x = profit_ratio, y = genre)) +
+  ##facet_wrap(vars(distributor)) +
+  ##labs(title = "Profits made by film distributors", 
+      ## x = "Median Profit Ratio", 
+       ##y = "Genre")
+```
+
+```{r}
+ggplot(movies_modified, aes(x = profit_ratio, y = genre)) +
+  facet_wrap(vars(distributor)) +
   stat_summary(fun = "median", geom = "bar") +
-  labs(title = "Profits made by film distributors", subtitle = "Ratio of profits to budgets", x = "Genre", y = "Median Profit Ratio")+  
-  coord_flip()
+  labs(title = "Profits made by film distributors", 
+       subtitle = "Ratio of profits to budgets",
+       caption = "Tidy Tuesday Oct 23, 2018", 
+       x = "Median Profit Ratio", 
+       y = "Genre")
 ```
 
 ```{r}
@@ -254,6 +284,10 @@ median_profit_ratios <- movies_modified %>%
 
 median_profit_ratios
 ```
+
+In ggformula, plotting a graph where one variable is quantitative (numerical) and the other is qualitative (categorical) isn't directly supported for certain plot types like bar plots. The functions in ggformula, such as gf_barh() and gf_bar(), typically expect categorical data, especially on the x-axis. When you try to combine a categorical variable with a numeric one, ggformula lacks the built-in functionality to calculate and display summary statistics like medians or means, which is often necessary when one axis involves quantitative data. Additional gf_barh() is not accepted as the function is no longer supported or recommended for use in ggformula. Instead, ggformula suggests using the gf_bar() function to create bar plots. However, gf_bar() plots vertical bars, not horizontal ones.
+
+In contrast, ggplot2 handles this more effectively through functions like stat_summary(), which calculates summary statistics, such as the median, directly within the plot creation process. This means that ggplot2 can handle the combination of quantitative and qualitative variables by automatically computing statistics before plotting. Whereas, in ggformula, you would need to pre-process and summarize your data separately before plotting.
 
 ## Plot Analysis
 
@@ -282,7 +316,7 @@ median_profit_ratios
 
     Adventure films also stand out in terms of profitability. The data suggests that they outperform genres like Drama, Action, and Comedy when considering the median profit ratios. This strong performance highlights a promising return on investment for films in this genre. Adventure films often feature engaging storytelling and visual effects, which can capture audiences and drive unimagnable box office success.
 
-    Interestingly, both Horror and Adventure genres have fewer films on the list compared to Drama, Action, and Comedy. Despite having less productions across all distributors, their higher profitability suggests a potential gap in the market. With fewer films, there is less competition, creating opportunities for small-budget productions. By focusing on these genres, investors can capitalize on their profitability while meeting audience demand for quality Horror and Adventur
+    Interestingly, both Horror and Adventure genres have fewer films on the list compared to Drama, Action, and Comedy. Despite having less productions across all distributors, their higher profitability suggests a potential gap in the market. With fewer films, there is less competition, creating opportunities for small-budget productions. By focusing on these genres, investors can capitalize on their profitability while meeting audience demand for quality Horror and Adventure.
 
 4.  Which R command might have been used to obtain the separate plots for each distributor?
 
@@ -292,6 +326,18 @@ median_profit_ratios
 
     This command allows for the creation of multiple subplots (facets) in one plot, where each subplot corresponds to a different distributor, allowing for easier comparison across them.
 
-5.  If the original dataset had BUDGETS and PROFITS in separate columns, what preprocessing might have been done to achieve this plot?
+5.  If the original dataset had BUDGETS and PROFITS in separate columns, what pre-processing might have been done to achieve this plot?
 
-## Insights
+    If the original dataset had separate columns for BUDGETS and PROFITS, several pre-processing steps would be necessary. First, a new column for profit_ratio would be created by dividing PROFITS by BUDGETS. Next, any missing values in the BUDGETS or PROFITS columns would need to be removed, hence cleaning the dataset or dropping values. Relevant columns would also be converted to appropriate data types, such as factors for qualitative variables like genre and distributor.
+
+## Inferences and My Journey
+
+In my exploration of the qualitative aspects of the movie profit dataset, I found the analysis of variables like the decade of release and distributor type to be particularly enlightening. By examining the decade of release, I discovered intriguing patterns in the industry, such as the increasing trend of multiple films being released on the same date, especially in recent years. This phenomenon suggests a highly competitive landscape where studios strategically choose release dates to maximize box office potential. Furthermore, my analysis of distributors revealed a significant presence of smaller or independent companies in the market, which play a crucial role in diversifying the types of films available to audiences.
+
+Understanding the dynamics between major studios and independent filmmakers provided me with valuable insights into the competitive nature of the film industry. I learned that while major studios often dominate in terms of budget and marketing, independent companies can reach audiences by offering unique storytelling and innovative concepts. This different types of distributors showed how important it is to have variety in film production, which makes the film industry more interesting. Additionally, analyzing the varying profit ratios across genres and distributors showed me how certain films and genres can thrive with audiences, revealing opportunities for future investments and productions. Specifically, Horror and Adventure films stand out due to their high median profit ratios and dedicated fan bases, suggesting that investing in these genres could lead to significant returns despite their fewer productions compared to Drama, Action, and Comedy.
+
+As I progressed through this analysis, I realized that the research questions I initially formulated differed from the final graphs I plotted. My original questions focused on understanding how production budgets and genres influenced profit ratios, as well as comparing domestic gross and worldwide gross across different distributors. However, as I worked on replicating the graph with code, I found that the median profit ratios for various genres by distributor provided a more comprehensive view of profitability trends. This shift in focus highlighted the importance of being flexible and responsive to the data, as it can lead to unexpected yet valuable findings.
+
+Working with visualization libraries like ggplot2 and ggformula was a significant part of my learning journey. I enjoyed creating various plots, especially bar charts, to illustrate the median profit ratios for different genres across distributors. Utilizing the stat_summary() function in ggplot2 allowed me to visualize summary statistics directly, which made my analysis more efficient. Creating separate facets for each distributor helped me see how profit ratios differed, making comparisons easier and more meaningful.
+
+Since I had not previously used ggplot2 to create graphs, I initially relied on ggformula for my code. However, I faced challenges because ggformula does not support combinations of quantitative and qualitative variables in plotting, which was frustrating at times. This experience helped me understand the strengths and limitations of different packages and functions. As a result, I learned how to use ggplot2 by referring to code examples on the website and ChatGPT.

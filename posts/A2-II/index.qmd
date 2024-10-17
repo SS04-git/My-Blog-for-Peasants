@@ -39,7 +39,7 @@ inspect(gifts_age)
 ```
 
 ```{r}
-skim(gifts_age)
+skimr::skim(gifts_age)
 ```
 
 ## Data Dictionary
@@ -134,8 +134,14 @@ The histograms for the eight spending categories—SpendingCelebrating, Candy, F
 
 ## Transforming the data
 
+Notes:
+
+-   **data.frame:** It is a specific type of data structure that organizes data into rows and columns, allowing for efficient storage and manipulation of datasets in a tabular format. In contrast, names like gifts_age or gifts_extra are user-defined variable names that represent specific instances of data frames, helping to describe the content they hold and making the code easier to understand.
+
+-   **pivot_longer:** It reshapes data from a wide format to a long format. This means it takes multiple columns and combines them into key-value pairs, creating a more compact data structure. It helps make data analysis and visualization easier by organizing related data points into a single column, which is useful for comparing and plotting.
+
 ```{r}
-data <- data.frame(
+gifts_extra <- data.frame(
   Age = c("18-24", "25-34", "35-44", "45-54", "55-64", "65+"),
   SpendingCelebrating = c(51, 40, 31, 19, 18, 13),
   Candy = c(70, 62, 58, 60, 50, 42),
@@ -147,18 +153,21 @@ data <- data.frame(
   GiftCards = c(23, 19, 22, 23, 20, 20)
 )
 
-# Convert to long format
-gifts <- data %>%
+gifts <- gifts_extra %>%
   pivot_longer(
     cols = -Age,               
     names_to = "Gifts",        
     values_to = "AmountsSpent" 
   )
+```
+
+```{r}
 gifts%>%
   dplyr::mutate(
     Age = as_factor(Age),      
-    Items = as_factor(Gifts)  
+    Gifts = as_factor(Gifts)  
   )
+gifts
 ```
 
 ## Target Variables
@@ -192,6 +201,8 @@ gf_line(AmountsSpent ~ Age, data = gifts, group = ~ Gifts, color = ~ Gifts) %>%
   ) %>%
   gf_refine(scale_color_manual(values = c("Candy" = "red", "Clothing" = "blue", "EveningOut" = "green", "Flowers" = "orange", "GiftCards" = "purple", "GreetingCards" = "pink", "Jewelry" = "yellow", "SpendingCelebrating" = "black"))) 
 ```
+
+### Plot with shapes
 
 ```{r}
 gf_line(AmountsSpent ~ Age, data = gifts, group = ~ Gifts, color = ~ Gifts) %>%
@@ -245,4 +256,37 @@ gf_line(AmountsSpent ~ Age, data = gifts, group = ~ Gifts, color = ~ Gifts) %>%
 
     Spending on candy and celebrations decreases steadily with age, while spending on greeting cards and gift cards remains relatively stable across age groups. The data suggests that older individuals prefer more practical gifts like gift cards, while younger people spend more on traditional gifts like candy and flowers. This reveals that younger age groups tend to spend more on gifts for Valentine's Day, particularly on candy and flowers, indicating that romantic gestures are more prominent among younger individuals and highlighting differing approaches to celebration across age brackets.
 
-inference
+## Inferences and My Journey
+
+I initially began working on a case study titled "Women Live Longer." I made significant progress on it and almost done with then case study when I ran into issues with replicating the graph. I tried multiple different versions, but none of them worked as expected. The closest attempt was using the following code:
+
+```{r}
+##ggplot(life_expectancy_data, aes(x = LifeExpMale, y = LifeExpFemale, size = Population))+   ##geom_point(shape = 21, color = "black", fill = NA) +  
+  ##geom_abline(intercept = 0, slope = 1, linetype = "dashed") + 
+  ##labs(title = "Life Expectancy across Countries and Years", 
+     ##x = "For Men (Years)", 
+     ##y = "For Women (Years)") +  
+  ##scale_size_continuous(breaks = c(5e8, 1e9), 
+                        ##labels = c("5.0e+08", "1.0e+09"), 
+                        ##guide = guide_legend(override.aes = list(fill = NA, color = "black"))) +  
+  ##xlim(50, 90) + 
+  ##ylim(50, 90)    
+```
+
+![](images/Screenshot%202024-10-14%20004956-01.png)
+
+However, the resulting plot had issues. The circles representing data points were inaccurately placed, and despite my efforts, I couldn't figure out how to correct it. Additionally, I wanted to attach the index file along with the rest of my A2, but the file was bugged, preventing me from rendering and pushing it to Git.
+
+After spending many hours without success, I decided to switch to the "Valentine’s Day Spending" case study. This one was much easier to understand and implement. I had no problems transforming the data and replicating the graphs. Identifying the quantitative and qualitative variables, along with the target and predictor variables, was also pretty easy.
+
+However, I did encounter a challenge while analyzing the graphs for quantitative variables. Most of them showed very little variation, which made them look different from typical histograms. This lack of diversity made it hard to draw meaningful observations from those graphs.
+
+I also felt confused about whether to use the transformed dataset or the original dataset when deciding on the quantitative and qualitative variables, as well as identifying the target and predictor variables. In the end, I decided to use the original dataset for identifying the quantitative and qualitative variables, and then I transformed it to determine the target and predictor variables.
+
+When transforming the data, using the pivot_longer() function was helpful. It reshaped the data into a long format, bringing together the amounts spent on each gift category into a single column. This change made it easier to visualize and compare spending across categories. By converting the Age and Gifts columns into factors, the analysis ensured they were treated correctly as categorical variables, which helped clarify the results.
+
+The visualizations I created using gf_line() and gf_point() effectively illustrated spending trends across different age groups. These functions allowed me to create clear line plots that displayed the data in an organized way. By using different colors and shapes for each gift category, I was able to make the information more visually appealing and easier to interpret.
+
+Learning how to implement shapes in the code was quite simple. had to look up which numbers corresponded to each shape and apply them in my plots. This added another layer of clarity, as it helped distinguish between the various spending categories. However, I'm still figuring out how to create the shape for spendingcelebrating, which looks like a circle with a '+' sign inside. My final guess is that maybe having a code where one shape is added to another might achieve the final shape. Despite this small challenge, using different shapes in my visualizations significantly improved my ability to see and compare spending patterns across age groups. It helped me understand how different age groups prioritize their spending on gifts.
+
+One important observation from the analysis is the difference in gift preferences among various age groups. Younger people, especially those aged 18-34, tend to spend more on traditional romantic gifts like candy and flowers, showing a clear preference for symbolic gifts. In contrast, older individuals (ages 55 and up) are less interested in extravagant items like jewelry and evening outings, but they consistently spend on practical gifts, highlighting a focus on usefulness and sentimental value. Distinct spending patterns also appeared across different gift categories; for example, spending on clothing and jewelry decreases with age, while greeting cards remain popular across all groups. Interestingly, spending on evening outings peaks among those in their mid-30s to mid-40s, suggesting this age group values experiences more than their younger or older counterparts. Overall, these trends provide valuable insights into how consumer behavior changes at different life stages.

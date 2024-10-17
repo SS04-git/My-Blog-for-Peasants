@@ -1,0 +1,131 @@
+---
+title: " Inference for a Single Mean"
+author: "Sara S"
+---
+
+## Installing Packages
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(mosaic)
+library(ggformula)
+library(infer)
+library(broom) # Clean test results in tibble form
+library(resampledata) # Datasets from Chihara and Hesterberg's book
+library(openintro) # More datasets
+```
+
+## Dataset: Toy Data - Reading
+
+Notes:
+
+-   **set.seed** : This function is used to ensure that the random number generation is reproducible. By setting a seed value (in this case, 40), every time this code is run, it will produce the same random numbers. This is essential for replicability in research and analysis.
+
+-   **rnorm(n, mean, sd)**: generates random numbers following a normal distribution.
+
+-   For this case study **rnorm(50, mean = 2, sd = 2)**
+
+    n = 50 This specifies that 50 random numbers should be generated.
+
+    mean = 2 This sets the mean of the distribution to 2.
+
+    sd = 2 This sets the standard deviation of the distribution to 2
+
+    The result is a vector y containing 50 random values drawn from a normal distribution with the specified mean and standard deviation. This data can be used for statistical analyses like t-tests.
+
+-   **mydata \<- tibble(y = y)**: This line converts the vector y into a tibble (a modern version of a data frame provided by the tibble package in R).
+
+```{r}
+set.seed(40)  # for replication
+# Data as individual vectors ( for t.tests etc)
+y <- rnorm(50, mean = 2, sd = 2)
+
+# And as tibble too
+mydata <- tibble(y = y)
+mydata
+```
+
+## **Inspecting and Charting Data**
+
+Notes:
+
+-   **dist = "dnorm"**: This function fits a normal distribution to the data.
+
+    There are others named "dexp" for Exponential distribution and "dpois" for Poisson distribution
+
+-   **gf_fitdistr**: It fits a normal distribution to the data and overlays it on the density plot, allowing for a direct visual comparison.
+
+```{r}
+mydata %>%
+    gf_density(~y) %>%
+    gf_fitdistr(dist = "dnorm") %>%
+    gf_labs(title = "Densities of Original Data Variables", subtitle = "Compared with Normal Density")
+```
+
+```{r}
+t1 <- mosaic::t_test(
+          y, # Name of variable
+          mu = 0, # belief of population mean
+          alternative = "two.sided") %>% # Check both sides
+  
+  broom::tidy() # Make results presentable, and plottable!!
+t1
+```
+
+```{r}
+t2 <- wilcox.test(y, # variable name
+                  mu = 0, # belief
+                  alternative = "two.sided",
+                  conf.int = TRUE,
+                  conf.level = 0.95) %>% 
+  broom::tidy()
+t2
+```
+
+## Exam Data
+
+```{r}
+data("exam_grades")
+exam_grades
+```
+
+```{r}
+exam_grades %>%
+    gf_density(~course_grade) %>%
+    gf_fitdistr(dist = "dnorm") %>%
+    gf_labs(title = "Density of Course Grade", subtitle = "Compared with Normal Density")
+```
+
+```{r}
+stats::shapiro.test(x = exam_grades$course_grade) %>%
+    broom::tidy()
+```
+
+```{r}
+library(nortest)
+# Especially when we have >= 5000 observations
+nortest::ad.test(x = exam_grades$course_grade) %>%
+    broom::tidy()
+```
+
+```{r}
+t4 <- mosaic::t_test(
+          exam_grades$course_grade, # Name of variable
+          mu = 80, # belief
+          alternative = "two.sided") %>% # Check both sides
+broom::tidy()
+t4
+```
+
+```{r}
+t5 <- wilcox.test(
+          exam_grades$course_grade, # Name of variable
+          mu = 90, # belief
+          alternative = "two.sided",
+          conf.int = TRUE,
+          conf.level = 0.95) %>% # Check both sides
+  
+  broom::tidy() # Make results presentable, and plottable!!
+t5
+```
