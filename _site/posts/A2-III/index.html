@@ -5764,14 +5764,13 @@ quantitative variables:
 <div class="cell">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>GGally<span class="sc">::</span><span class="fu">ggpairs</span>(</span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  subjects <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>(),</span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Select the variables to include in the plot</span></span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"ArtsMusic"</span>, <span class="st">"English"</span>, <span class="st">"ForeignLanguages"</span>, <span class="st">"Mathematics"</span>, <span class="st">"NaturalSciences"</span>, <span class="st">"SocialSciencesHistory"</span>),</span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">switch =</span> <span class="st">"both"</span>,</span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">progress =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">diag =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="st">"densityDiag"</span>),</span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">lower =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="fu">wrap</span>(<span class="st">"smooth"</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)),</span>
-<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">"Academic Scores Correlation Plot"</span></span>
-<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"ArtsMusic"</span>, <span class="st">"English"</span>, <span class="st">"ForeignLanguages"</span>, <span class="st">"Mathematics"</span>, <span class="st">"NaturalSciences"</span>, <span class="st">"SocialSciencesHistory"</span>),</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">switch =</span> <span class="st">"both"</span>,</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">progress =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">diag =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="st">"densityDiag"</span>),</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">lower =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="fu">wrap</span>(<span class="st">"smooth"</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)),</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">"Academic Scores Correlation Plot"</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -5808,11 +5807,11 @@ quantitative variables:
 <div class="cell">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>name_data <span class="ot">&lt;-</span> school_modified <span class="sc">%&gt;%</span></span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    FamilyIncomeBetween20_40KMath,</span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>    FamilyIncomeLessThan20KMath,</span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>    FamilyIncomeBetween40_60KMath,</span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>    FamilyIncomeBetween60_80KMath,</span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>    FamilyIncomeBetween80_100KMath,</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    FamilyIncomeBetween40_60KMath,</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>    FamilyIncomeBetween60_80KMath,</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>    FamilyIncomeBetween80_100KMath,</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>    FamilyIncomeLessThan20KMath,</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>    FamilyIncomeBetween20_40KMath,</span>
 <span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>    FamilyIncomeMoreThan100KMath</span>
 <span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
 <span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
@@ -5844,27 +5843,25 @@ quantitative variables:
 <pre><code># A tibble: 3,462 × 2
    names          values
    &lt;ord&gt;           &lt;dbl&gt;
- 1 Between20_40K     513
- 2 LessThan20K       462
- 3 Between40_60K     539
- 4 Between60_80K     550
- 5 Between80_100K    566
+ 1 Between40_60K     539
+ 2 Between60_80K     550
+ 3 Between80_100K    566
+ 4 LessThan20K       462
+ 5 Between20_40K     513
  6 MoreThan100K      588
- 7 Between20_40K     492
- 8 LessThan20K       464
- 9 Between40_60K     517
-10 Between60_80K     513
+ 7 Between40_60K     517
+ 8 Between60_80K     513
+ 9 Between80_100K    528
+10 LessThan20K       464
 # ℹ 3,452 more rows</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>name_data <span class="sc">%&gt;%</span></span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(<span class="fu">reorder</span>(names, values, <span class="at">FUN =</span> median) <span class="sc">~</span> values,</span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill =</span> <span class="sc">~</span>names,</span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Maths vs Family Income"</span>,</span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">"Scores In Maths"</span>,</span>
-<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">"Income Class"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(<span class="fu">reorder</span>(names, values, <span class="at">FUN =</span> median) <span class="sc">~</span> values) <span class="sc">%&gt;%</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Maths vs Family Income"</span>,</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">"Scores In Maths"</span>,</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">"Income Class"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -5873,6 +5870,26 @@ quantitative variables:
 </div>
 </div>
 </div>
+<section id="plot-with-specified-colours" class="level3">
+<h3 class="anchored" data-anchor-id="plot-with-specified-colours">Plot with specified colours</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>name_data <span class="sc">%&gt;%</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_boxplot</span>(<span class="fu">reorder</span>(names, values, <span class="at">FUN =</span> median) <span class="sc">~</span> values,</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill =</span> <span class="sc">~</span>names,</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(<span class="at">title =</span> <span class="st">"Maths Scores vs Family Income"</span>,</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">"Scores In Maths"</span>,</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> <span class="st">"Income Class"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"gray80"</span>, <span class="st">"gray65"</span>, <span class="st">"gray50"</span>, <span class="st">"gray40"</span>, <span class="st">"gray25"</span>, <span class="st">"gray10"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>At first, I struggled to replicate the exact colors from the website. However, adjusting the opacity with alpha improved the color matching. This adjustment helped me get as close as possible to the necessary colors.</p>
 <ol type="1">
 <li><p>Type of Charts.</p>
 <p>Box Plot: It compares math scores across different income groups, showing the differences in average scores (median) and the range of scores (spread) for each group. This chart helps us see how math scores change with income levels and whether higher incomes are linked to higher and more consistent scores.</p></li>
@@ -5880,16 +5897,23 @@ quantitative variables:
 <p>X-axis Variables: Represents the math scores for students named as values.</p>
 <p>Y-axis Variables: The variable names represents the different family income categories. These categories include LessThan20K, Between20_40K, Between40_60K, Between60_80K, Between80_100K, and MoreThan100K. These were created by mutating the original columns from FamilyIncomeLessThan20KMath, FamilyIncomeBetween20_40KMath, FamilyIncomeBetween40_60KMath, FamilyIncomeBetween60_80KMath, FamilyIncomeBetween80_100KMath and FamilyIncomeMoreThan100KMath.</p>
 <p>Fill: The names variables is used for color-coded representation of each income group, such as LessThan20K, Between20_40K, Between40_60K, Between60_80K, Between80_100K, and MoreThan100K.</p></li>
-<li><p>What activity might have been carried out to obtain the data graphed here?</p></li>
-</ol>
-<p>To obtain the data graphed here, a survey or study likely collected information on students’ family incomes after their tests on various subjects, focusing solely on math performance to analyze the relationship between income levels and academic achievement.</p>
-<ol start="4" type="1">
+<li><p>What activity might have been carried out to obtain the data graphed here?</p>
+<p>To obtain the data graphed here, a survey or study likely collected information on students’ family incomes after their tests on various subjects, focusing solely on math performance to analyze the relationship between income levels and academic achievement.</p></li>
 <li><p>Hypothesis/Research Question</p>
 <p>Is there a relationship between family income and students’ performance in mathematics?</p></li>
 <li><p>Two-Line Story Based on the Graph</p>
 <p>The box plot reveals that lower-income students have a wider range in their performance levels for maths scores. Surprisingly, students from higher income families consistently achieve better median scores, suggesting that financial resources play a significant role in academic success despite the larger population in lower income brackets.</p></li>
 </ol>
-<p>inferences</p>
+</section>
+</section>
+<section id="inferences-and-my-journey" class="level2">
+<h2 class="anchored" data-anchor-id="inferences-and-my-journey">Inferences and My Journey</h2>
+<p>Throughout my analysis of the school scores dataset, I gained valuable insights into how different factors, such as family income and gender, can influence students’ academic performance. By exploring the data, I discovered that students from various income levels show different patterns in their scores across subjects like Mathematics, English, and Science. For example, students from families earning less than $20,000 often displayed a wider range of performance levels, with some achieving high scores while others struggled. In contrast, those from families earning more than $100,000 consistently scored higher, suggesting that financial stability might provide access to better educational resources. This understanding highlights the importance of considering socioeconomic backgrounds when evaluating educational outcomes and devising strategies for improving academic performance.</p>
+<p>I practiced using functions like mutate, pivot_longer, and clean_names, which helped me reshape and standardize the data for better analysis. The mutate function allowed me to create new variables that made it easier to interpret the data, while pivot_longer helped transform the dataset into a longer format, making it suitable for visualization. Creating visualizations, such as scatter plots and box plots, allowed me to see how scores were distributed among students from different family income levels. The histogram for the “FamilyIncomeLessThan20KMath” variable, for example, revealed that most students scored above 400, indicating that, despite their low income, many were performing well. These graphs not only made the data more engaging but also revealed patterns I might have missed when looking at just the table.</p>
+<p>The correlation plots were particularly interesting. Using GGally::ggpairs, I was able to visualize the relationships between different subjects, revealing that students who excel in Mathematics also tended to perform well in Science and English. This positive correlation shows that if students do well in one subject, they’re likely to do well in others too. This highlights the importance of teaching methods that connect different subjects and support overall student growth.</p>
+<p>I noticed that my first research questions I had are slightly connected to the box plot created. The question looks at how family income affects average test scores in different states, which has some similarities to the boxplot showing the connection between math scores and income. This shows how socio-economic status can influence academic success. The second question explores whether there are performance differences between male and female students across various subjects, which again has its similarities and differences with Chart 1 about academic scores.</p>
+<p>Additionally, the box plot comparing math scores with family income provided a clear visual representation of how income levels affect academic performance. The plot showed that students from higher-income families had higher median scores, while those from lower-income backgrounds displayed a wider range of scores, indicating significant differences in academic achievement. This shows how financial resources can impact educational success, suggesting that more support and resources may be needed for lower-income students to ensure them with possibly similar achievements.</p>
+<p>Finally, I couldn’t reproduce the exact version of the boxplot graph shown on the website. In my graph, the “LessThan20K” category appears at the bottom, but on the website, it’s the second category. Additionally, the tables listing the names and values don’t match those on the website either.</p>
 
 
 </section>

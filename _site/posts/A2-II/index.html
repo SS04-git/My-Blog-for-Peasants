@@ -327,7 +327,7 @@ quantitative variables:
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(gifts_age)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>skimr<span class="sc">::</span><span class="fu">skim</span>(gifts_age)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <caption>Data summary</caption>
@@ -706,8 +706,13 @@ quantitative variables:
 </section>
 <section id="transforming-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="transforming-the-data">Transforming the data</h2>
+<p>Notes:</p>
+<ul>
+<li><p><strong>data.frame:</strong> It is a specific type of data structure that organizes data into rows and columns, allowing for efficient storage and manipulation of datasets in a tabular format. In contrast, names like gifts_age or gifts_extra are user-defined variable names that represent specific instances of data frames, helping to describe the content they hold and making the code easier to understand.</p></li>
+<li><p><strong>pivot_longer:</strong> It reshapes data from a wide format to a long format. This means it takes multiple columns and combines them into key-value pairs, creating a more compact data structure. It helps make data analysis and visualization easier by organizing related data points into a single column, which is useful for comparing and plotting.</p></li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>gifts_extra <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Age =</span> <span class="fu">c</span>(<span class="st">"18-24"</span>, <span class="st">"25-34"</span>, <span class="st">"35-44"</span>, <span class="st">"45-54"</span>, <span class="st">"55-64"</span>, <span class="st">"65+"</span>),</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">SpendingCelebrating =</span> <span class="fu">c</span>(<span class="dv">51</span>, <span class="dv">40</span>, <span class="dv">31</span>, <span class="dv">19</span>, <span class="dv">18</span>, <span class="dv">13</span>),</span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Candy =</span> <span class="fu">c</span>(<span class="dv">70</span>, <span class="dv">62</span>, <span class="dv">58</span>, <span class="dv">60</span>, <span class="dv">50</span>, <span class="dv">42</span>),</span>
@@ -719,32 +724,50 @@ quantitative variables:
 <span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">GiftCards =</span> <span class="fu">c</span>(<span class="dv">23</span>, <span class="dv">19</span>, <span class="dv">22</span>, <span class="dv">23</span>, <span class="dv">20</span>, <span class="dv">20</span>)</span>
 <span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to long format</span></span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>gifts <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">-</span>Age,               </span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"Gifts"</span>,        </span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"AmountsSpent"</span> </span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>gifts<span class="sc">%&gt;%</span></span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">Age =</span> <span class="fu">as_factor</span>(Age),      </span>
-<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">Items =</span> <span class="fu">as_factor</span>(Gifts)  </span>
-<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>gifts <span class="ot">&lt;-</span> gifts_extra <span class="sc">%&gt;%</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">-</span>Age,               </span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"Gifts"</span>,        </span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"AmountsSpent"</span> </span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>gifts<span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">Age =</span> <span class="fu">as_factor</span>(Age),      </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gifts =</span> <span class="fu">as_factor</span>(Gifts)  </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 48 × 4
-   Age   Gifts               AmountsSpent Items              
-   &lt;fct&gt; &lt;chr&gt;                      &lt;dbl&gt; &lt;fct&gt;              
- 1 18-24 SpendingCelebrating           51 SpendingCelebrating
- 2 18-24 Candy                         70 Candy              
- 3 18-24 Flowers                       50 Flowers            
- 4 18-24 Jewelry                       33 Jewelry            
- 5 18-24 GreetingCards                 33 GreetingCards      
- 6 18-24 EveningOut                    41 EveningOut         
- 7 18-24 Clothing                      33 Clothing           
- 8 18-24 GiftCards                     23 GiftCards          
- 9 25-34 SpendingCelebrating           40 SpendingCelebrating
-10 25-34 Candy                         62 Candy              
+<pre><code># A tibble: 48 × 3
+   Age   Gifts               AmountsSpent
+   &lt;fct&gt; &lt;fct&gt;                      &lt;dbl&gt;
+ 1 18-24 SpendingCelebrating           51
+ 2 18-24 Candy                         70
+ 3 18-24 Flowers                       50
+ 4 18-24 Jewelry                       33
+ 5 18-24 GreetingCards                 33
+ 6 18-24 EveningOut                    41
+ 7 18-24 Clothing                      33
+ 8 18-24 GiftCards                     23
+ 9 25-34 SpendingCelebrating           40
+10 25-34 Candy                         62
+# ℹ 38 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>gifts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 48 × 3
+   Age   Gifts               AmountsSpent
+   &lt;chr&gt; &lt;chr&gt;                      &lt;dbl&gt;
+ 1 18-24 SpendingCelebrating           51
+ 2 18-24 Candy                         70
+ 3 18-24 Flowers                       50
+ 4 18-24 Jewelry                       33
+ 5 18-24 GreetingCards                 33
+ 6 18-24 EveningOut                    41
+ 7 18-24 Clothing                      33
+ 8 18-24 GiftCards                     23
+ 9 25-34 SpendingCelebrating           40
+10 25-34 Candy                         62
 # ℹ 38 more rows</code></pre>
 </div>
 </div>
@@ -769,39 +792,15 @@ quantitative variables:
 <section id="plot" class="level2">
 <h2 class="anchored" data-anchor-id="plot">Plot</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_line</span>(AmountsSpent <span class="sc">~</span> Age, <span class="at">data =</span> gifts, <span class="at">group =</span> <span class="sc">~</span> Gifts, <span class="at">color =</span> <span class="sc">~</span> Gifts) <span class="sc">%&gt;%</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">gf_point</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Valentine's Day Spending over Age"</span>,</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age Group in Years"</span>,</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Amounts Spent per Gift"</span>,</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Tidy Tuesday 13-Feb-2024. I was teaching O&amp;C that day"</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Candy"</span> <span class="ot">=</span> <span class="st">"red"</span>, <span class="st">"Clothing"</span> <span class="ot">=</span> <span class="st">"blue"</span>, <span class="st">"EveningOut"</span> <span class="ot">=</span> <span class="st">"green"</span>, <span class="st">"Flowers"</span> <span class="ot">=</span> <span class="st">"orange"</span>, <span class="st">"GiftCards"</span> <span class="ot">=</span> <span class="st">"purple"</span>, <span class="st">"GreetingCards"</span> <span class="ot">=</span> <span class="st">"pink"</span>, <span class="st">"Jewelry"</span> <span class="ot">=</span> <span class="st">"yellow"</span>, <span class="st">"SpendingCelebrating"</span> <span class="ot">=</span> <span class="st">"black"</span>))) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_line</span>(AmountsSpent <span class="sc">~</span> Age, <span class="at">data =</span> gifts, <span class="at">group =</span> <span class="sc">~</span> Gifts, <span class="at">color =</span> <span class="sc">~</span> Gifts) <span class="sc">%&gt;%</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">gf_point</span>(<span class="at">shape =</span> <span class="sc">~</span> Gifts, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span>  <span class="co"># Use shape directly</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Valentine's Day Spending over Age"</span>,</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age Group in Years"</span>,</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Amounts Spent per Gift"</span>,</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Tidy Tuesday 13-Feb-2024. I was teaching O&amp;C that day"</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Candy"</span> <span class="ot">=</span> <span class="st">"red"</span>, <span class="st">"Clothing"</span> <span class="ot">=</span> <span class="st">"blue"</span>, <span class="st">"EveningOut"</span> <span class="ot">=</span> <span class="st">"green"</span>, </span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Flowers"</span> <span class="ot">=</span> <span class="st">"orange"</span>, <span class="st">"GiftCards"</span> <span class="ot">=</span> <span class="st">"purple"</span>, </span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"GreetingCards"</span> <span class="ot">=</span> <span class="st">"pink"</span>, <span class="st">"Jewelry"</span> <span class="ot">=</span> <span class="st">"yellow"</span>, </span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"SpendingCelebrating"</span> <span class="ot">=</span> <span class="st">"black"</span>))) <span class="sc">%&gt;%</span></span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_shape_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Candy"</span> <span class="ot">=</span> <span class="dv">16</span>, <span class="st">"Clothing"</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">"EveningOut"</span> <span class="ot">=</span> <span class="dv">17</span>, </span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">"Flowers"</span> <span class="ot">=</span> <span class="dv">4</span>, <span class="st">"GiftCards"</span> <span class="ot">=</span> <span class="dv">18</span>, <span class="st">"GreetingCards"</span> <span class="ot">=</span> <span class="dv">25</span>, </span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">"Jewelry"</span> <span class="ot">=</span> <span class="dv">8</span>, <span class="st">"SpendingCelebrating"</span> <span class="ot">=</span> <span class="dv">3</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_line</span>(AmountsSpent <span class="sc">~</span> Age, <span class="at">data =</span> gifts, <span class="at">group =</span> <span class="sc">~</span> Gifts, <span class="at">color =</span> <span class="sc">~</span> Gifts) <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">gf_point</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Valentine's Day Spending over Age"</span>,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age Group in Years"</span>,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Amounts Spent per Gift"</span>,</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Tidy Tuesday 13-Feb-2024. I was teaching O&amp;C that day"</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Candy"</span> <span class="ot">=</span> <span class="st">"red"</span>, <span class="st">"Clothing"</span> <span class="ot">=</span> <span class="st">"blue"</span>, <span class="st">"EveningOut"</span> <span class="ot">=</span> <span class="st">"green"</span>, <span class="st">"Flowers"</span> <span class="ot">=</span> <span class="st">"orange"</span>, <span class="st">"GiftCards"</span> <span class="ot">=</span> <span class="st">"purple"</span>, <span class="st">"GreetingCards"</span> <span class="ot">=</span> <span class="st">"pink"</span>, <span class="st">"Jewelry"</span> <span class="ot">=</span> <span class="st">"yellow"</span>, <span class="st">"SpendingCelebrating"</span> <span class="ot">=</span> <span class="st">"black"</span>))) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -810,6 +809,33 @@ quantitative variables:
 </div>
 </div>
 </div>
+<section id="plot-with-shapes" class="level3">
+<h3 class="anchored" data-anchor-id="plot-with-shapes">Plot with shapes</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_line</span>(AmountsSpent <span class="sc">~</span> Age, <span class="at">data =</span> gifts, <span class="at">group =</span> <span class="sc">~</span> Gifts, <span class="at">color =</span> <span class="sc">~</span> Gifts) <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">gf_point</span>(<span class="at">shape =</span> <span class="sc">~</span> Gifts, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span>  <span class="co"># Use shape directly</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_labs</span>(</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Valentine's Day Spending over Age"</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age Group in Years"</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Amounts Spent per Gift"</span>,</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Tidy Tuesday 13-Feb-2024. I was teaching O&amp;C that day"</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Candy"</span> <span class="ot">=</span> <span class="st">"red"</span>, <span class="st">"Clothing"</span> <span class="ot">=</span> <span class="st">"blue"</span>, <span class="st">"EveningOut"</span> <span class="ot">=</span> <span class="st">"green"</span>, </span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Flowers"</span> <span class="ot">=</span> <span class="st">"orange"</span>, <span class="st">"GiftCards"</span> <span class="ot">=</span> <span class="st">"purple"</span>, </span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"GreetingCards"</span> <span class="ot">=</span> <span class="st">"pink"</span>, <span class="st">"Jewelry"</span> <span class="ot">=</span> <span class="st">"yellow"</span>, </span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"SpendingCelebrating"</span> <span class="ot">=</span> <span class="st">"black"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_refine</span>(<span class="fu">scale_shape_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Candy"</span> <span class="ot">=</span> <span class="dv">16</span>, <span class="st">"Clothing"</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">"EveningOut"</span> <span class="ot">=</span> <span class="dv">17</span>, </span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">"Flowers"</span> <span class="ot">=</span> <span class="dv">4</span>, <span class="st">"GiftCards"</span> <span class="ot">=</span> <span class="dv">18</span>, <span class="st">"GreetingCards"</span> <span class="ot">=</span> <span class="dv">25</span>, </span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">"Jewelry"</span> <span class="ot">=</span> <span class="dv">8</span>, <span class="st">"SpendingCelebrating"</span> <span class="ot">=</span> <span class="dv">3</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="plot-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="plot-analysis">Plot Analysis</h2>
@@ -831,7 +857,31 @@ quantitative variables:
 <li><p>Two-Line Story Based on the Graph.</p>
 <p>Spending on candy and celebrations decreases steadily with age, while spending on greeting cards and gift cards remains relatively stable across age groups. The data suggests that older individuals prefer more practical gifts like gift cards, while younger people spend more on traditional gifts like candy and flowers. This reveals that younger age groups tend to spend more on gifts for Valentine’s Day, particularly on candy and flowers, indicating that romantic gestures are more prominent among younger individuals and highlighting differing approaches to celebration across age brackets.</p></li>
 </ol>
-<p>inference</p>
+</section>
+<section id="inferences-and-my-journey" class="level2">
+<h2 class="anchored" data-anchor-id="inferences-and-my-journey">Inferences and My Journey</h2>
+<p>I initially began working on a case study titled “Women Live Longer.” I made significant progress on it and almost done with then case study when I ran into issues with replicating the graph. I tried multiple different versions, but none of them worked as expected. The closest attempt was using the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="do">##ggplot(life_expectancy_data, aes(x = LifeExpMale, y = LifeExpFemale, size = Population))+   ##geom_point(shape = 21, color = "black", fill = NA) +  </span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="do">##geom_abline(intercept = 0, slope = 1, linetype = "dashed") + </span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="do">##labs(title = "Life Expectancy across Countries and Years", </span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>     <span class="do">##x = "For Men (Years)", </span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>     <span class="do">##y = "For Women (Years)") +  </span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="do">##scale_size_continuous(breaks = c(5e8, 1e9), </span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>                        <span class="do">##labels = c("5.0e+08", "1.0e+09"), </span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>                        <span class="do">##guide = guide_legend(override.aes = list(fill = NA, color = "black"))) +  </span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="do">##xlim(50, 90) + </span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="do">##ylim(50, 90)    </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="images/Screenshot 2024-10-14 004956-01.png" class="img-fluid"></p>
+<p>However, the resulting plot had issues. The circles representing data points were inaccurately placed, and despite my efforts, I couldn’t figure out how to correct it. Additionally, I wanted to attach the index file along with the rest of my A2, but the file was bugged, preventing me from rendering and pushing it to Git.</p>
+<p>After spending many hours without success, I decided to switch to the “Valentine’s Day Spending” case study. This one was much easier to understand and implement. I had no problems transforming the data and replicating the graphs. Identifying the quantitative and qualitative variables, along with the target and predictor variables, was also pretty easy.</p>
+<p>However, I did encounter a challenge while analyzing the graphs for quantitative variables. Most of them showed very little variation, which made them look different from typical histograms. This lack of diversity made it hard to draw meaningful observations from those graphs.</p>
+<p>I also felt confused about whether to use the transformed dataset or the original dataset when deciding on the quantitative and qualitative variables, as well as identifying the target and predictor variables. In the end, I decided to use the original dataset for identifying the quantitative and qualitative variables, and then I transformed it to determine the target and predictor variables.</p>
+<p>When transforming the data, using the pivot_longer() function was helpful. It reshaped the data into a long format, bringing together the amounts spent on each gift category into a single column. This change made it easier to visualize and compare spending across categories. By converting the Age and Gifts columns into factors, the analysis ensured they were treated correctly as categorical variables, which helped clarify the results.</p>
+<p>The visualizations I created using gf_line() and gf_point() effectively illustrated spending trends across different age groups. These functions allowed me to create clear line plots that displayed the data in an organized way. By using different colors and shapes for each gift category, I was able to make the information more visually appealing and easier to interpret.</p>
+<p>Learning how to implement shapes in the code was quite simple. had to look up which numbers corresponded to each shape and apply them in my plots. This added another layer of clarity, as it helped distinguish between the various spending categories. However, I’m still figuring out how to create the shape for spendingcelebrating, which looks like a circle with a ‘+’ sign inside. My final guess is that maybe having a code where one shape is added to another might achieve the final shape. Despite this small challenge, using different shapes in my visualizations significantly improved my ability to see and compare spending patterns across age groups. It helped me understand how different age groups prioritize their spending on gifts.</p>
+<p>One important observation from the analysis is the difference in gift preferences among various age groups. Younger people, especially those aged 18-34, tend to spend more on traditional romantic gifts like candy and flowers, showing a clear preference for symbolic gifts. In contrast, older individuals (ages 55 and up) are less interested in extravagant items like jewelry and evening outings, but they consistently spend on practical gifts, highlighting a focus on usefulness and sentimental value. Distinct spending patterns also appeared across different gift categories; for example, spending on clothing and jewelry decreases with age, while greeting cards remain popular across all groups. Interestingly, spending on evening outings peaks among those in their mid-30s to mid-40s, suggesting this age group values experiences more than their younger or older counterparts. Overall, these trends provide valuable insights into how consumer behavior changes at different life stages.</p>
 
 
 </section>

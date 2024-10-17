@@ -1199,33 +1199,62 @@ quantitative variables:
 <section id="research-questions" class="level2">
 <h2 class="anchored" data-anchor-id="research-questions">Research Questions</h2>
 <ol type="1">
-<li><p>How do production budget and genre together influence the profit ratio of a movie?</p></li>
-<li><p>How do different film distributors compare in profit ratios across various genres?</p></li>
-<li><p>How do domestic gross and distributor type affect the overall worldwide gross of a movie?</p></li>
+<li>How do production budget and genre together influence the profit ratio of a movie?</li>
+<li>How do domestic gross and distributor type affect the overall worldwide gross of a movie?</li>
 </ol>
 </section>
 <section id="plot" class="level2">
 <h2 class="anchored" data-anchor-id="plot">Plot</h2>
+<p>Notes:</p>
+<ul>
+<li><p><strong>stat_summary</strong>: This function in ggplot2 allows you to summarize data in various ways before plotting.</p></li>
+<li><p><strong>geom = “bar”</strong>: This specifies that the summarized data will be shown as bars. A bar is created for each genre, showing the median profit ratio for that genre within each distributor facet. Since you are using stat_summary, the height of the bar represents the calculated median value of profit_ratio.</p></li>
+</ul>
+<section id="using-ggformula" class="level3">
+<h3 class="anchored" data-anchor-id="using-ggformula">Using ggformula</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(movies_modified, <span class="fu">aes</span>(<span class="at">x =</span> genre, <span class="at">y =</span> profit_ratio)) <span class="sc">+</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(distributor))<span class="sc">+</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> <span class="st">"median"</span>, <span class="at">geom =</span> <span class="st">"bar"</span>) <span class="sc">+</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Profits made by film distributors"</span>, <span class="at">subtitle =</span> <span class="st">"Ratio of profits to budgets"</span>, <span class="at">x =</span> <span class="st">"Genre"</span>, <span class="at">y =</span> <span class="st">"Median Profit Ratio"</span>)<span class="sc">+</span>  </span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="do">##gf_barh( ~ genre | distributor, data = movies_modified) %&gt;% </span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>      <span class="do">##gf_lab(y = "Genre", x = "Median Profit Ratio",</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>       <span class="do">##title = "Profits made by film distributors")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="using-ggformula-bar-instead-of-barh" class="level3">
+<h3 class="anchored" data-anchor-id="using-ggformula-bar-instead-of-barh">Using ggformula (bar instead of barh)</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="do">##gf_bar( ~ genre | distributor, data = movies_modified, </span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>         <span class="do">##ylab = "Genre", xlab = "Median Profit Ratio", </span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>         <span class="do">##title = "Profits made by film distributors")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="do">##ggplot(movies_modified, aes(x = profit_ratio, y = genre)) +</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="do">##facet_wrap(vars(distributor)) +</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="do">##labs(title = "Profits made by film distributors", </span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>      <span class="do">## x = "Median Profit Ratio", </span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>       <span class="do">##y = "Genre")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(movies_modified, <span class="fu">aes</span>(<span class="at">x =</span> profit_ratio, <span class="at">y =</span> genre)) <span class="sc">+</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(distributor)) <span class="sc">+</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> <span class="st">"median"</span>, <span class="at">geom =</span> <span class="st">"bar"</span>) <span class="sc">+</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Profits made by film distributors"</span>, </span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Ratio of profits to budgets"</span>,</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Tidy Tuesday Oct 23, 2018"</span>, </span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Median Profit Ratio"</span>, </span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Genre"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>median_profit_ratios <span class="ot">&lt;-</span> movies_modified <span class="sc">%&gt;%</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(genre) <span class="sc">%&gt;%</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">median_profit_ratio =</span> <span class="fu">median</span>(profit_ratio, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>median_profit_ratios</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>median_profit_ratios <span class="ot">&lt;-</span> movies_modified <span class="sc">%&gt;%</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(genre) <span class="sc">%&gt;%</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">median_profit_ratio =</span> <span class="fu">median</span>(profit_ratio, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>median_profit_ratios</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 2
   genre     median_profit_ratio
@@ -1237,6 +1266,9 @@ quantitative variables:
 5 Adventure             2.49e14</code></pre>
 </div>
 </div>
+<p>In ggformula, plotting a graph where one variable is quantitative (numerical) and the other is qualitative (categorical) isn’t directly supported for certain plot types like bar plots. The functions in ggformula, such as gf_barh() and gf_bar(), typically expect categorical data, especially on the x-axis. When you try to combine a categorical variable with a numeric one, ggformula lacks the built-in functionality to calculate and display summary statistics like medians or means, which is often necessary when one axis involves quantitative data. Additional gf_barh() is not accepted as the function is no longer supported or recommended for use in ggformula. Instead, ggformula suggests using the gf_bar() function to create bar plots. However, gf_bar() plots vertical bars, not horizontal ones.</p>
+<p>In contrast, ggplot2 handles this more effectively through functions like stat_summary(), which calculates summary statistics, such as the median, directly within the plot creation process. This means that ggplot2 can handle the combination of quantitative and qualitative variables by automatically computing statistics before plotting. Whereas, in ggformula, you would need to pre-process and summarize your data separately before plotting.</p>
+</section>
 </section>
 <section id="plot-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="plot-analysis">Plot Analysis</h2>
@@ -1249,30 +1281,36 @@ quantitative variables:
 <p>Faceting Variable: Distributor - the film distributor. Its used to create separate panels for each distributor.</p></li>
 <li><p>If you were to invest in movie production ventures, which are the two best genres that you might decide to invest in?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(movies_modified, <span class="fu">aes</span>(<span class="at">x =</span> genre, <span class="at">y =</span> profit_ratio)) <span class="sc">+</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> <span class="st">"median"</span>, <span class="at">geom =</span> <span class="st">"bar"</span>) <span class="sc">+</span></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Profits made by film distributors"</span>, <span class="at">subtitle =</span> <span class="st">"Ratio of profits to budgets"</span>, <span class="at">x =</span> <span class="st">"Genre"</span>, <span class="at">y =</span> <span class="st">"Median Profit Ratio"</span>)<span class="sc">+</span>  </span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(movies_modified, <span class="fu">aes</span>(<span class="at">x =</span> genre, <span class="at">y =</span> profit_ratio)) <span class="sc">+</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> <span class="st">"median"</span>, <span class="at">geom =</span> <span class="st">"bar"</span>) <span class="sc">+</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Profits made by film distributors"</span>, <span class="at">subtitle =</span> <span class="st">"Ratio of profits to budgets"</span>, <span class="at">x =</span> <span class="st">"Genre"</span>, <span class="at">y =</span> <span class="st">"Median Profit Ratio"</span>)<span class="sc">+</span>  </span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>If one were to invest in movie production ventures, the two best genres to consider would be Horror and Adventure. Based on the graph, Horror films show a notably high median profit ratio across various distributors, indicating their ability to generate substantial profits relative to their budgets. This genre has a dedicated fan base, and films often attract audiences, especially during peak seasons like Halloween. Investing in Horror films could bring in significant returns, given their financial success and proven ability to draw in crowds.</p>
 <p>Adventure films also stand out in terms of profitability. The data suggests that they outperform genres like Drama, Action, and Comedy when considering the median profit ratios. This strong performance highlights a promising return on investment for films in this genre. Adventure films often feature engaging storytelling and visual effects, which can capture audiences and drive unimagnable box office success.</p>
-<p>Interestingly, both Horror and Adventure genres have fewer films on the list compared to Drama, Action, and Comedy. Despite having less productions across all distributors, their higher profitability suggests a potential gap in the market. With fewer films, there is less competition, creating opportunities for small-budget productions. By focusing on these genres, investors can capitalize on their profitability while meeting audience demand for quality Horror and Adventur</p></li>
+<p>Interestingly, both Horror and Adventure genres have fewer films on the list compared to Drama, Action, and Comedy. Despite having less productions across all distributors, their higher profitability suggests a potential gap in the market. With fewer films, there is less competition, creating opportunities for small-budget productions. By focusing on these genres, investors can capitalize on their profitability while meeting audience demand for quality Horror and Adventure.</p></li>
 <li><p>Which R command might have been used to obtain the separate plots for each distributor?</p>
 <p>The R command used to create separate plots for each distributor in the graph is:</p>
 <p>facet_wrap(vars(distributor))</p>
 <p>This command allows for the creation of multiple subplots (facets) in one plot, where each subplot corresponds to a different distributor, allowing for easier comparison across them.</p></li>
-<li><p>If the original dataset had BUDGETS and PROFITS in separate columns, what preprocessing might have been done to achieve this plot?</p></li>
+<li><p>If the original dataset had BUDGETS and PROFITS in separate columns, what pre-processing might have been done to achieve this plot?</p>
+<p>If the original dataset had separate columns for BUDGETS and PROFITS, several pre-processing steps would be necessary. First, a new column for profit_ratio would be created by dividing PROFITS by BUDGETS. Next, any missing values in the BUDGETS or PROFITS columns would need to be removed, hence cleaning the dataset or dropping values. Relevant columns would also be converted to appropriate data types, such as factors for qualitative variables like genre and distributor.</p></li>
 </ol>
 </section>
-<section id="insights" class="level2">
-<h2 class="anchored" data-anchor-id="insights">Insights</h2>
+<section id="inferences-and-my-journey" class="level2">
+<h2 class="anchored" data-anchor-id="inferences-and-my-journey">Inferences and My Journey</h2>
+<p>In my exploration of the qualitative aspects of the movie profit dataset, I found the analysis of variables like the decade of release and distributor type to be particularly enlightening. By examining the decade of release, I discovered intriguing patterns in the industry, such as the increasing trend of multiple films being released on the same date, especially in recent years. This phenomenon suggests a highly competitive landscape where studios strategically choose release dates to maximize box office potential. Furthermore, my analysis of distributors revealed a significant presence of smaller or independent companies in the market, which play a crucial role in diversifying the types of films available to audiences.</p>
+<p>Understanding the dynamics between major studios and independent filmmakers provided me with valuable insights into the competitive nature of the film industry. I learned that while major studios often dominate in terms of budget and marketing, independent companies can reach audiences by offering unique storytelling and innovative concepts. This different types of distributors showed how important it is to have variety in film production, which makes the film industry more interesting. Additionally, analyzing the varying profit ratios across genres and distributors showed me how certain films and genres can thrive with audiences, revealing opportunities for future investments and productions. Specifically, Horror and Adventure films stand out due to their high median profit ratios and dedicated fan bases, suggesting that investing in these genres could lead to significant returns despite their fewer productions compared to Drama, Action, and Comedy.</p>
+<p>As I progressed through this analysis, I realized that the research questions I initially formulated differed from the final graphs I plotted. My original questions focused on understanding how production budgets and genres influenced profit ratios, as well as comparing domestic gross and worldwide gross across different distributors. However, as I worked on replicating the graph with code, I found that the median profit ratios for various genres by distributor provided a more comprehensive view of profitability trends. This shift in focus highlighted the importance of being flexible and responsive to the data, as it can lead to unexpected yet valuable findings.</p>
+<p>Working with visualization libraries like ggplot2 and ggformula was a significant part of my learning journey. I enjoyed creating various plots, especially bar charts, to illustrate the median profit ratios for different genres across distributors. Utilizing the stat_summary() function in ggplot2 allowed me to visualize summary statistics directly, which made my analysis more efficient. Creating separate facets for each distributor helped me see how profit ratios differed, making comparisons easier and more meaningful.</p>
+<p>Since I had not previously used ggplot2 to create graphs, I initially relied on ggformula for my code. However, I faced challenges because ggformula does not support combinations of quantitative and qualitative variables in plotting, which was frustrating at times. This experience helped me understand the strengths and limitations of different packages and functions. As a result, I learned how to use ggplot2 by referring to code examples on the website and ChatGPT.</p>
 
 
 </section>
